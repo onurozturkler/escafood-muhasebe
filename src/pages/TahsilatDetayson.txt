@@ -1,0 +1,138 @@
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { generateTahsilatPDF } from "../lib/pdfGenerator";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+
+interface TahsilatData {
+  id: string;
+  tahsilatNo: string;
+  tarih: string;
+  tahsilatTuru: string;
+  aciklama: string;
+  tahsilatTutari: number;
+  musteriId: string;
+}
+
+interface MusteriData {
+  musteriAdi: string;
+  adres: string;
+  carihesap?: number;
+}
+
+const TahsilatDetay = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [tahsilat, setTahsilat] = useState<TahsilatData | null>(null);
+  const [musteri, setMusteri] = useState<MusteriData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTahsilat = async () => {
+      try {
+        const tahsilatRef = doc(db, "tahsilatlar", id!);
+        const tahsilatSnap = await getDoc(tahsilatRef);
+
+        if (!tahsilatSnap.exists()) {
+          alert("Tahsilat bulunamadı!");
+          navigate("/tahsilatlar");
+          return;
+        }
+
+        const tahsilatData = { id: tahsilatSnap.id, ...tahsilatSnap.data() } as TahsilatData;
+        setTahsilat(tahsilatData);
+        fetchMusteriBilgileri(tahsilatData.musteriId);
+      } catch (error) {
+        console.error("Tahsilat verisi alınırken hata oluştu:", error);
+      }
+    };
+
+    const fetchMusteriBilgileri = async (musteriId: string) => {
+      try {
+        const musteriRef = doc(db, "musteriler", musteriId);
+        const musteriSnap = await getDoc(musteriRef);
+
+        if (musteriSnap.exists()) {
+          setMusteri(musteriSnap.data() as MusteriData);
+        }
+      } catch (error) {
+        console.error("Müşteri verisi alınırken hata oluştu:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTahsilat();
+  }, [id, navigate]);
+
+  const handlePDFDownload = () => {
+    if (!tahsilat || !musteri) {
+      alert("Tahsilat veya müşteri bilgisi eksik! Lütfen tekrar deneyin.");
+      return;
+    }
+
+    generateTahsilatPDF(tahsilat, musteri);
+  };
+
+  // Format currency
+  const formatNumber = (num: number): string => {
+    const formattedNum = num.toFixed(2).replace(".", ",");
+    return `₺${formattedNum.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+  };
+
+  if (loading) return <div className="flex justify-center p-8">Veriler yükleniyor...</div>;
+  if (!tahsilat || !musteri) return <div className="text-red-500 font-bold p-8">Veri bulunamadı!</div>;
+
+  return (
+    <div className="container mx-auto p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Tahsilat Detayı</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="font-semibold">Tahsilat No:</p>
+              <p>{tahsilat.tahsilatNo}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Tarih:</p>
+              <p>{new Date(tahsilat.tarih).toLocaleDateString("tr-TR")}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Müşteri:</p>
+              <p>{musteri.musteriAdi}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Tahsilat Tutarı:</p>
+              <p>{formatNumber(tahsilat.tahsilatTutari)}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Tahsilat Türü:</p>
+              <p>{tahsilat.tahsilatTuru}</p>
+            </div>
+          </div>
+
+          <Separator className="my-4" />
+          
+          <div>
+            <p className="font-semibold">Açıklama:</p>
+            <p>{tahsilat.aciklama}</p>
+          </div>
+
+          <Button 
+            onClick={handlePDFDownload}
+            className="mt-4 w-full md:w-auto"
+          >
+            PDF İndir
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default TahsilatDetay;

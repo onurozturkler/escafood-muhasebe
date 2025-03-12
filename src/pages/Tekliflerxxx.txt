@@ -1,0 +1,118 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { collection, getDocs, getDoc, doc } from "firebase/firestore"; 
+import { db } from "../firebase"; 
+
+const Teklifler = () => {
+    const [teklifler, setTeklifler] = useState([]);
+    const [musteriler, setMusteriler] = useState({});
+    const navigate = useNavigate();
+
+    // Tarih formatlama fonksiyonu
+    const formatliTarih = (timestamp) => {
+        if (!timestamp) return "Tarih Yok";
+        
+        const timestampValue = timestamp > 10000000000 ? timestamp / 1000 : timestamp; // Milisaniye kontrolü
+        const date = new Date(timestampValue * 1000);
+        
+        return date.toLocaleDateString("tr-TR"); // "dd.MM.yyyy" formatında gösterir
+    };
+
+    useEffect(() => {
+        const fetchMusteriler = async () => {
+            const musterilerSnapshot = await getDocs(collection(db, "musteriler"));
+            let musteriMap = {};
+            musterilerSnapshot.forEach((doc) => {
+                const data = doc.data();
+                musteriMap[doc.id] = data.musteriAdi || "Bilinmeyen Müşteri";
+            });
+            setMusteriler(musteriMap);
+        };
+
+        const fetchTeklifler = async () => {
+            const tekliflerSnapshot = await getDocs(collection(db, "teklifler"));
+            let maxTeklifNo = 10000; // Başlangıç değeri
+
+            let tekliflerList = await Promise.all(tekliflerSnapshot.docs.map(async (docSnap) => {
+                const data = docSnap.data();
+
+                // En büyük teklif numarasını bul
+                if (data.teklifNo && !isNaN(data.teklifNo)) {
+                    maxTeklifNo = Math.max(maxTeklifNo, parseInt(data.teklifNo));
+                }
+
+                // Müşteri adı kontrolü
+                let musteriAdi = "Bilinmeyen Müşteri";
+                if (data.musteriId) {
+                    try {
+                        const musteriRef = doc(db, "musteriler", data.musteriId); 
+                        const musteriSnap = await getDoc(musteriRef);
+                        if (musteriSnap.exists()) {
+                            musteriAdi = musteriSnap.data().musteriAdi;
+                        }
+                    } catch (error) {
+                        console.error("Müşteri bilgisi alınırken hata oluştu:", error);
+                    }
+                }
+
+                return {
+                    id: docSnap.id,
+                    teklifId: data.teklifNo || docSnap.id,
+                    tarih: formatliTarih(data.tarih),
+                    musteriAdi: musteriAdi,
+                    toplamTutar: data.toplamTutar || 0
+                };
+            }));
+
+            // Yeni teklif numarasını güncelle
+            setTeklifler(tekliflerList);
+        };
+
+        const fetchData = async () => {
+            await fetchMusteriler();
+            await fetchTeklifler();
+        };
+
+        fetchData();
+    }, []);
+
+    return (
+        <div>
+            <h2>Teklifler</h2>
+            <button onClick={() => navigate("/teklifler/yeni")}>+ Yeni Teklif Ekle</button>
+            <table border="1" cellPadding="5" cellSpacing="0">
+                <thead>
+                    <tr>
+                        <th>Teklif No</th>
+                        <th>Tarih</th>
+                        <th>Müşteri</th>
+                        <th>Toplam Tutar</th>
+                        <th>Detay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {teklifler.map((teklif) => {
+                        const formattedTutar = new Intl.NumberFormat('tr-TR', {
+                            style: 'currency',
+                            currency: 'TRY'
+                        }).format(parseFloat(teklif.toplamTutar) || 0);
+
+                        return (
+                            <tr key={teklif.id}>
+                                <td>{teklif.teklifId}</td>
+                                <td>{teklif.tarih}</td>
+                                <td>{teklif.musteriAdi}</td>
+                                <td>{formattedTutar}</td>
+                                <td>
+                                    <button onClick={() => navigate(`/teklifler/detay/${teklif.id}`)}>Detay</button>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+export default Teklifler;

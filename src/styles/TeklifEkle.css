@@ -1,0 +1,52 @@
+.teklif-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.teklif-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #2c3e50;
+}
+
+.teklif-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.teklif-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.teklif-table th, .teklif-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.teklif-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.teklif-button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.teklif-button:hover {
+  background-color: #218838;
+}

@@ -1,0 +1,70 @@
+/* Genel Sayfa Stili */
+.tahsilat-container {
+    width: 100%; /* Sayfanın tamamını kapsasın */
+    max-width: 600px; /* Maksimum genişlik belirleyelim */
+    margin-left: 20;
+    margin-right: auto;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+
+/* Başlık */
+.title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Detay Alanı */
+.detail-box {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.detail-box p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.detail-box span {
+    font-weight: bold;
+    color: #222;
+}
+
+/* PDF İndir Butonu */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.download-btn {
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.download-btn:hover {
+    background: #0056b3;
+}
+
+/* Yükleniyor Mesajı */
+.loading {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+}

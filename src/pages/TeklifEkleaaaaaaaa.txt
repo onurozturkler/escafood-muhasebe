@@ -1,0 +1,176 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, addDoc, getDocs, query, orderBy, limit } from "firebase/firestore";
+
+const TeklifEkle = () => {
+    const [musteriler, setMusteriler] = useState([]);
+    const [urunler, setUrunler] = useState([]);
+    const [secilenMusteri, setSecilenMusteri] = useState("");
+    const [secilenUrun, setSecilenUrun] = useState(null);
+    const [urunListesi, setUrunListesi] = useState([]);
+    const [toplamTutar, setToplamTutar] = useState(0);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchMusteriler = async () => {
+            const querySnapshot = await getDocs(collection(db, "musteriler"));
+            setMusteriler(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        };
+
+        const fetchUrunler = async () => {
+            const querySnapshot = await getDocs(collection(db, "urunler"));
+            setUrunler(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        };
+
+        fetchMusteriler();
+        fetchUrunler();
+    }, []);
+
+    const getNewTeklifNo = async () => {
+        const teklifQuery = query(collection(db, "teklifler"), orderBy("teklifNo", "desc"), limit(1));
+        const querySnapshot = await getDocs(teklifQuery);
+        if (!querySnapshot.empty) {
+            return querySnapshot.docs[0].data().teklifNo + 1;
+        }
+        return 100001;
+    };
+
+    const urunEkle = () => {
+        if (secilenUrun) {
+            const yeniUrun = {
+                ...secilenUrun,
+                miktar: 1, 
+                fiyat: secilenUrun.fiyat,
+                toplam: secilenUrun.fiyat * 1
+            };
+            setUrunListesi([...urunListesi, yeniUrun]);
+            hesaplaToplam([...urunListesi, yeniUrun]);
+        }
+    };
+
+    const urunSil = (index) => {
+        const yeniListe = urunListesi.filter((_, i) => i !== index);
+        setUrunListesi(yeniListe);
+        hesaplaToplam(yeniListe);
+    };
+
+    const handleMiktarDegis = (index, yeniMiktar) => {
+        let yeniListe = [...urunListesi];
+        yeniListe[index] = {
+            ...yeniListe[index],
+            miktar: parseInt(yeniMiktar),
+            toplam: yeniListe[index].fiyat * parseInt(yeniMiktar)
+        };
+        setUrunListesi(yeniListe);
+        hesaplaToplam(yeniListe);
+    };
+
+    const handleFiyatDegis = (index, yeniFiyat) => {
+        let yeniListe = [...urunListesi];
+        yeniListe[index] = {
+            ...yeniListe[index],
+            fiyat: parseFloat(yeniFiyat),
+            toplam: parseFloat(yeniFiyat) * yeniListe[index].miktar
+        };
+        setUrunListesi(yeniListe);
+        hesaplaToplam(yeniListe);
+    };
+
+    const hesaplaToplam = (liste) => {
+        const toplam = liste.reduce((acc, urun) => acc + urun.toplam, 0);
+        setToplamTutar(toplam);
+    };
+
+    const handleTeklifKaydet = async () => {
+        if (!secilenMusteri || urunListesi.length === 0) {
+            alert("Lütfen müşteri seçin ve en az bir ürün ekleyin.");
+            return;
+        }
+
+        const yeniTeklifNo = await getNewTeklifNo();
+
+        const yeniTeklif = {
+            musteriId: secilenMusteri,
+            teklifNo: yeniTeklifNo,
+            tarih: Date.now(),
+            toplamTutar: toplamTutar,
+            urunler: urunListesi,
+        };
+
+        await addDoc(collection(db, "teklifler"), yeniTeklif);
+        alert("Teklif başarıyla kaydedildi!");
+        navigate("/teklifler");
+    };
+
+    return (
+        <div>
+            <h2>Yeni Teklif Ekle</h2>
+            <label>Müşteri: </label>
+            <select onChange={(e) => setSecilenMusteri(e.target.value)}>
+                <option value="">Seçiniz</option>
+                {musteriler.map(musteri => (
+                    <option key={musteri.id} value={musteri.id}>
+                        {musteri.musteriAdi}
+                    </option>
+                ))}
+            </select>
+
+            <label> Ürün: </label>
+            <select onChange={(e) => setSecilenUrun(urunler.find(u => u.id === e.target.value))}>
+                <option value="">Seçiniz</option>
+                {urunler.map(urun => (
+                    <option key={urun.id} value={urun.id}>
+                        {urun.urunAdi} - ₺{urun.fiyat}
+                    </option>
+                ))}
+            </select>
+            <button onClick={urunEkle}>Ürün Ekle</button>
+
+            <h3>Eklenen Ürünler</h3>
+            <table border="1" cellPadding="5" cellSpacing="0">
+                <thead>
+                    <tr>
+                        <th>Ürün Adı</th>
+                        <th>Miktar</th>
+                        <th>Birim Fiyat</th>
+                        <th>Toplam</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {urunListesi.map((urun, index) => (
+                        <tr key={index}>
+                            <td>{urun.urunAdi}</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    value={urun.miktar}
+                                    onChange={(e) => handleMiktarDegis(index, e.target.value)}
+                                    style={{ width: "50px" }}
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    value={urun.fiyat}
+                                    onChange={(e) => handleFiyatDegis(index, e.target.value)}
+                                    style={{ width: "70px" }}
+                                />
+                            </td>
+                            <td>₺{urun.toplam.toFixed(2)}</td>
+                            <td>
+                                <button onClick={() => urunSil(index)}>Sil</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            <h3>Toplam Tutar: ₺{toplamTutar.toFixed(2)}</h3>
+            <button onClick={handleTeklifKaydet}>Teklif Kaydet</button>
+        </div>
+    );
+};
+
+export default TeklifEkle;

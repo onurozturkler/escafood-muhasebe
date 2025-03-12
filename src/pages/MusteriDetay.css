@@ -1,0 +1,44 @@
+.musteri-detay {
+  font-family: Arial, sans-serif;
+  background: #f8f8f8;
+  padding: 20px;
+}
+
+.title {
+  color: #333;
+  font-weight: bold;
+}
+
+.subtitle {
+  margin-top: 15px;
+  color: #444;
+  font-weight: bold;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background: #E60000;
+  color: white;
+}
+
+.cancelled {
+  text-decoration: line-through;
+  color: red;
+}
+
+.pdf-button {
+  background: #E60000;
+  color: white;
+  padding: 10px;
+}

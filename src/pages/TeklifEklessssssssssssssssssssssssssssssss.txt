@@ -1,0 +1,187 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, getDocs, query, orderBy, addDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+
+const TeklifEkle = () => {
+    const [musteriler, setMusteriler] = useState([]);
+    const [urunler, setUrunler] = useState([]);
+    const [secilenMusteri, setSecilenMusteri] = useState("");
+    const [secilenUrun, setSecilenUrun] = useState(null);
+    const [urunListesi, setUrunListesi] = useState([]);
+    const [toplamTutar, setToplamTutar] = useState(0.00);
+    const navigate = useNavigate();
+const [iskontoOrani, setIskontoOrani] = useState(0);
+
+    useEffect(() => {
+        const fetchMusteriler = async () => {
+            const querySnapshot = await getDocs(collection(db, "musteriler"));
+            setMusteriler(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        };
+
+        const fetchUrunler = async () => {
+            const querySnapshot = await getDocs(query(collection(db, "urunler"), orderBy("urunAdi")));
+            setUrunler(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        };
+
+        fetchMusteriler();
+        fetchUrunler();
+    }, []);
+
+    const getNextTeklifNo = async () => {
+        const querySnapshot = await getDocs(collection(db, "teklifler"));
+        const teklifNos = querySnapshot.docs.map(doc => doc.data().teklifNo).filter(num => !isNaN(num));
+        return teklifNos.length > 0 ? Math.max(...teklifNos) + 1 : 10001;
+    };
+
+    const handleUrunEkle = () => {
+        if (!secilenUrun) {
+            alert("Lütfen bir ürün seçin!");
+            return;
+        }
+
+        setUrunListesi(prevList => {
+            const yeniListe = [...prevList, {
+                ...secilenUrun,
+                miktar: 1,
+                fiyat: parseFloat(secilenUrun.fiyat).toFixed(2),
+                toplam: parseFloat(secilenUrun.fiyat).toFixed(2),
+                barkod: secilenUrun.barkod || "0000000000000"
+            }];
+            hesaplaToplam(yeniListe);
+            return yeniListe;
+        });
+    };
+
+    const handleDegisim = (index, field, value) => {
+        setUrunListesi(prevList => {
+            const yeniListe = [...prevList];
+            yeniListe[index][field] = value;
+
+            if (field === "urunAdi") {
+                yeniListe[index].barkod = ""; // Ürün adı değiştiğinde barkodu sıfırla
+            }
+
+            if (field === "miktar" || field === "fiyat") {
+                yeniListe[index].toplam = (parseFloat(yeniListe[index].miktar) * parseFloat(yeniListe[index].fiyat)).toFixed(2);
+            }
+
+            hesaplaToplam(yeniListe);
+            return yeniListe;
+        });
+    };
+
+    const hesaplaToplam = (liste) => {
+        const yeniToplam = liste.reduce((acc, urun) => acc + (parseFloat(urun.toplam) || 0), 0).toFixed(2);
+        setToplamTutar(yeniToplam);
+    };
+
+    const handleTeklifKaydet = async () => {
+        if (!secilenMusteri || urunListesi.length === 0) {
+            alert("Lütfen müşteri seçin ve en az bir ürün ekleyin!");
+            return;
+        }
+
+        let yeniUrunler = [...urunListesi];
+        for (let urun of yeniUrunler) {
+            if (!urunler.some(u => u.urunAdi === urun.urunAdi)) {
+                const ekle = window.confirm(`${urun.urunAdi} adlı ürün listede yok. Eklemek ister misiniz?`);
+                if (ekle) {
+                    let barkod = "0000000000000";
+                    const barkodGir = window.confirm("Barkod girmek ister misiniz?");
+                    if (barkodGir) {
+                        barkod = prompt("Barkodu girin:") || "0000000000000";
+                    }
+                    await addDoc(collection(db, "urunler"), {
+                        urunAdi: urun.urunAdi,
+                        fiyat: parseFloat(urun.fiyat).toFixed(2),
+                        stok: 0,
+                        barkod: barkod
+                    });
+                    urun.barkod = barkod;
+                }
+            }
+        }
+
+        const teklifNo = await getNextTeklifNo();
+        const toplamTutar = parseFloat(yeniUrunler.reduce((acc, urun) => acc + (parseFloat(urun.toplam) || 0), 0).toFixed(2));
+
+        // Müşteri cari hesap güncellemesi
+        const musteriRef = doc(db, "musteriler", secilenMusteri);
+        const musteriSnap = await getDoc(musteriRef);
+        if (musteriSnap.exists()) {
+            const mevcutCariHesap = musteriSnap.data().carihesap || 0;
+            await updateDoc(musteriRef, { carihesap: mevcutCariHesap + toplamTutar });
+        }
+
+        await addDoc(collection(db, "teklifler"), {
+            musteriId: secilenMusteri,
+            urunler: yeniUrunler,
+            toplamTutar: toplamTutar,
+            tarih: Date.now(),
+            teklifNo: teklifNo
+        });
+
+        alert("Teklif kaydedildi ve müşteri cari hesabı güncellendi!");
+        navigate("/teklifler");
+    };
+
+    return (
+        <div>
+            <h2>Yeni Teklif Ekle</h2>
+            <label>Müşteri: </label>
+            <select onChange={(e) => setSecilenMusteri(e.target.value)}>
+                <option value="">Seçiniz</option>
+                {musteriler.map(musteri => (
+                    <option key={musteri.id} value={musteri.id}>{musteri.musteriAdi}</option>
+                ))}
+            </select>
+
+            <label> Ürün: </label>
+            <select onChange={(e) => setSecilenUrun(urunler.find(u => u.id === e.target.value))}>
+                <option value="">Seçiniz</option>
+                {urunler.map(urun => (
+                    <option key={urun.id} value={urun.id}>{urun.urunAdi} - ₺{parseFloat(urun.fiyat).toFixed(2)}</option>
+                ))}
+            </select>
+            <button onClick={handleUrunEkle}>Ürün Ekle</button>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Barkod</th>
+                        <th>Ürün Adı</th>
+                        <th>Miktar</th>
+                        <th>Fiyat</th>
+                        <th>Toplam</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {urunListesi.map((urun, index) => (
+                        <tr key={index}>
+                            <td>{urun.barkod}</td>
+                            <td><input type="text" value={urun.urunAdi} onChange={(e) => handleDegisim(index, "urunAdi", e.target.value)} /></td>
+                            <td><input type="number" value={urun.miktar} onChange={(e) => handleDegisim(index, "miktar", e.target.value)} /></td>
+                            <td><input type="number" value={urun.fiyat} onChange={(e) => handleDegisim(index, "fiyat", e.target.value)} /></td>
+                            <td>₺{urun.toplam}</td>
+			    <td><button onClick={() => setUrunListesi(urunListesi.filter((_, i) => i !== index))}>Sil</button></td>
+
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <label>İskonto Oranı (%): </label>
+            <input type="number" value={iskontoOrani} onChange={(e) => setIskontoOrani(parseFloat(e.target.value) || 0)} />
+            <h3>Toplam Tutar: ₺{urunListesi.reduce((acc, urun) => acc + (parseFloat(urun.toplam) || 0), 0).toFixed(2)}</h3>
+            <h3>İskontolu Toplam: ₺{parseFloat(toplamTutar).toFixed(2)}</h3>
+            <button onClick={handleTeklifKaydet}>Teklif Kaydet</button>
+        </div>
+    );
+};
+
+export default TeklifEkle;
+
+
+
+

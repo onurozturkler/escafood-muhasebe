@@ -1,0 +1,54 @@
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+
+const TahsilatDetay = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [tahsilat, setTahsilat] = useState(null);
+    const [cariEkstre, setCariEkstre] = useState([]);
+
+    useEffect(() => {
+        const fetchTahsilat = async () => {
+            const tahsilatRef = doc(db, "tahsilatlar", id);
+            const tahsilatSnap = await getDoc(tahsilatRef);
+            if (tahsilatSnap.exists()) {
+                setTahsilat({ id: tahsilatSnap.id, ...tahsilatSnap.data() });
+                fetchCariEkstre(tahsilatSnap.data().musteriId);
+            } else {
+                alert("Tahsilat bulunamadı!");
+                navigate("/tahsilatlar");
+            }
+        };
+
+        const fetchCariEkstre = async (musteriId) => {
+            const ekstreRef = collection(db, "cariEkstre");
+            const querySnapshot = await getDocs(ekstreRef);
+            const ekstreData = querySnapshot.docs
+                .map(doc => ({ id: doc.id, ...doc.data() }))
+                .filter(entry => entry.musteriId === musteriId)
+                .sort((a, b) => new Date(b.tarih) - new Date(a.tarih)); // Yeni kayıtları üste al
+            setCariEkstre(ekstreData);
+        };
+
+        fetchTahsilat();
+    }, [id, navigate]);
+
+    if (!tahsilat) return <p>Yükleniyor...</p>;
+
+    return (
+        <div>
+            <h2>Tahsilat Detayı</h2>
+            <p><strong>Tahsilat No:</strong> {tahsilat.tahsilatNo}</p>
+            <p><strong>Tarih:</strong> {new Date(tahsilat.tarih).toLocaleDateString("tr-TR")}</p>
+            <p><strong>Müşteri:</strong> {tahsilat.musteriAdi}</p>
+            <p><strong>Tahsilat Tutarı:</strong> ₺{tahsilat.tahsilatTutari.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+	    <p><strong>Tahsilat Türü:</strong> {tahsilat.tahsilatTuru}</p>
+	    <p><strong>Açıklama:</strong> {tahsilat.aciklama}</p>
+
+          </div>
+    );
+};
+
+export default TahsilatDetay;

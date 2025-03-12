@@ -1,0 +1,77 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, getDocs, deleteDoc, doc, addDoc } from "firebase/firestore";
+import * as XLSX from "xlsx";
+
+const Musteriler = () => {
+    const [musteriler, setMusteriler] = useState([]);
+    const [sortField, setSortField] = useState("musteriAdi");
+    const [sortOrder, setSortOrder] = useState("asc");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [yeniMusteri, setYeniMusteri] = useState({ musteriAdi: "", adres: "", carihesap: 0 });
+    const navigate = useNavigate();
+    const adminSifre = "12345";
+
+    useEffect(() => {
+        const fetchMusteriler = async () => {
+            const querySnapshot = await getDocs(collection(db, "musteriler"));
+            setMusteriler(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        };
+        fetchMusteriler();
+    }, []);
+
+    const toplamCariHesap = musteriler.reduce((acc, musteri) => acc + (parseFloat(musteri.carihesap) || 0), 0);
+
+    return (
+        <div>
+            <h2>Müşteriler</h2>
+            <h3>Toplam Cari Hesap: <span style={{ color: toplamCariHesap < 0 ? 'red' : 'green' }}>
+                ₺{toplamCariHesap.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span></h3>
+
+            <h3>Müşteri Arama</h3>
+            <input
+                type="text"
+                placeholder="Müşteri Adı Ara..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+            />
+
+            <table border="1" cellPadding="5" cellSpacing="0">
+                <thead>
+                    <tr>
+                        <th onClick={() => handleSort("musteriAdi")}>Müşteri Adı</th>
+                        <th onClick={() => handleSort("adres")}>Adres</th>
+                        <th onClick={() => handleSort("carihesap")}>Cari Hesap</th>
+                        <th>Detay</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {musteriler
+                        .filter(musteri => musteri.musteriAdi.toLowerCase().includes(searchTerm))
+                        .map(musteri => (
+                            <tr key={musteri.id}>
+                                <td>{musteri.musteriAdi}</td>
+                                <td>{musteri.adres}</td>
+                                <td style={{ color: musteri.carihesap < 0 ? 'red' : 'green' }}>
+                                    ₺{parseFloat(musteri.carihesap).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </td>
+                                <td>
+                                    <button onClick={() => navigate(`/musteriler/detay/${musteri.id}`)}>Detay</button>
+                                </td>
+                                <td>
+                                    <button onClick={() => handleMusteriSil(musteri.id, musteri.musteriAdi)} style={{ backgroundColor: "red", color: "white" }}>
+                                        Sil
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+export default Musteriler;

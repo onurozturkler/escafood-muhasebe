@@ -1,0 +1,141 @@
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+const TahsilatDetay = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [tahsilat, setTahsilat] = useState(null);
+    const [musteri, setMusteri] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    // 📌 Verileri Firestore'dan çek
+    useEffect(() => {
+        const fetchTahsilat = async () => {
+            try {
+                const tahsilatRef = doc(db, "tahsilatlar", id);
+                const tahsilatSnap = await getDoc(tahsilatRef);
+
+                if (!tahsilatSnap.exists()) {
+                    alert("Tahsilat bulunamadı!");
+                    navigate("/tahsilatlar");
+                    return;
+                }
+
+                const tahsilatData = { id: tahsilatSnap.id, ...tahsilatSnap.data() };
+                setTahsilat(tahsilatData);
+                fetchMusteriBilgileri(tahsilatData.musteriId);
+            } catch (error) {
+                console.error("Tahsilat verisi alınırken hata oluştu:", error);
+            }
+        };
+
+        const fetchMusteriBilgileri = async (musteriId) => {
+            try {
+                const musteriRef = doc(db, "musteriler", musteriId);
+                const musteriSnap = await getDoc(musteriRef);
+
+                if (musteriSnap.exists()) {
+                    setMusteri(musteriSnap.data());
+                }
+            } catch (error) {
+                console.error("Müşteri verisi alınırken hata oluştu:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTahsilat();
+    }, [id, navigate]);
+
+    // 📌 Sayı formatlayıcı fonksiyon
+    const formatNumber = (num) => {
+        return `₺${(num || 0).toLocaleString("tr-TR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        })}`;
+    };
+
+    // 📌 PDF İndir Fonksiyonu
+    const handlePDFDownload = () => {
+        if (!tahsilat || !musteri) {
+            alert("Tahsilat veya müşteri bilgisi eksik! Lütfen tekrar deneyin.");
+            return;
+        }
+
+        const doc = new jsPDF();
+        doc.setFont("times", "normal");
+        doc.setLanguage("tr");
+
+        // 📌 Şirket Bilgileri
+        doc.setFontSize(18);
+        doc.text("Tahsilat Makbuzu", 80, 20);
+        doc.setFontSize(12);
+        doc.text("ESCA FOOD GIDA DIŞ TİCARET SANAYİ ANONİM ŞİRKETİ", 14, 40);
+        doc.text("Yeni Bağlıca Mah Etimesgut Blv No: 6H/A", 14, 50);
+        doc.text("Etimesgut, ANKARA – Türkiye", 14, 60);
+        doc.text("Vergi No: 3770983099 (Etimesgut)", 14, 70);
+
+        // 📌 Müşteri Bilgileri
+        doc.setFontSize(14);
+        doc.text("Sayın:", 120, 40);
+        doc.text(musteri.musteriAdi || "-", 120, 50);
+        doc.text("Adres:", 120, 60);
+        doc.text(musteri.adres || "-", 120, 70);
+
+        // 📌 Sayıları düzgün formatla
+        const tahsilatTutari = formatNumber(tahsilat.tahsilatTutari);
+        const tahsilatSonrasiCariHesap = formatNumber((musteri.carihesap || 0) - tahsilat.tahsilatTutari);
+
+        // 📌 Tahsilat Tablosu
+        autoTable(doc, {
+            startY: 90,
+            head: [["Belge No", "Tarih", "Tahsilat Türü", "Açıklama", "Tahsilat Tutarı"]],
+            body: [[
+                tahsilat.tahsilatNo || "-",
+                new Date(tahsilat.tarih || Date.now()).toLocaleDateString("tr-TR"),
+                tahsilat.tahsilatTuru || "-",
+                tahsilat.aciklama || "-",
+                tahsilatTutari
+            ]],
+            styles: { fontSize: 10 },
+        });
+
+        // 📌 Toplam Tutar
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Tahsilat Toplamı: ${tahsilatTutari}`, 14, doc.lastAutoTable.finalY + 10);
+
+        // 📌 Tahsilat sonrası cari hesap
+        doc.setTextColor(tahsilatSonrasiCariHesap.includes("-") ? "red" : "black");
+        doc.text(
+            `Tahsilat Sonrası Cari Hesap: ${tahsilatSonrasiCariHesap}`,
+            14,
+            doc.lastAutoTable.finalY + 20
+        );
+
+        doc.save(`Tahsilat_Makbuzu_${tahsilat.tahsilatNo || "Bilinmiyor"}.pdf`);
+    };
+
+    if (loading) return <p>Veriler yükleniyor...</p>;
+    if (!tahsilat || !musteri) return <p className="text-red-500 font-bold">Veri bulunamadı!</p>;
+
+    return (
+        <div>
+            <h2>Tahsilat Detayı</h2>
+            <p><strong>Tahsilat No:</strong> {tahsilat.tahsilatNo}</p>
+            <p><strong>Tarih:</strong> {new Date(tahsilat.tarih).toLocaleDateString("tr-TR")}</p>
+            <p><strong>Müşteri:</strong> {musteri.musteriAdi}</p>
+            <p><strong>Tahsilat Tutarı:</strong> {formatNumber(tahsilat.tahsilatTutari)}</p>
+            <p><strong>Tahsilat Türü:</strong> {tahsilat.tahsilatTuru}</p>
+            <p><strong>Açıklama:</strong> {tahsilat.aciklama}</p>
+
+            <button onClick={handlePDFDownload}>PDF İndir</button>
+        </div>
+    );
+};
+
+export default TahsilatDetay;

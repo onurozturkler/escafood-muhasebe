@@ -1,0 +1,141 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, getDocs, query, orderBy, addDoc } from "firebase/firestore";
+
+const TeklifEkle = () => {
+    const [musteriler, setMusteriler] = useState([]);
+    const [urunler, setUrunler] = useState([]);
+    const [secilenMusteri, setSecilenMusteri] = useState("");
+    const [secilenUrun, setSecilenUrun] = useState(null);
+    const [urunListesi, setUrunListesi] = useState([]);
+    const [toplamTutar, setToplamTutar] = useState(0.00);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchMusteriler = async () => {
+            const querySnapshot = await getDocs(collection(db, "musteriler"));
+            setMusteriler(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        };
+
+        const fetchUrunler = async () => {
+            const querySnapshot = await getDocs(query(collection(db, "urunler"), orderBy("urunAdi")));
+            setUrunler(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        };
+
+        fetchMusteriler();
+        fetchUrunler();
+    }, []);
+
+    const getNextTeklifNo = async () => {
+        const querySnapshot = await getDocs(collection(db, "teklifler"));
+        const teklifNos = querySnapshot.docs.map(doc => doc.data().teklifNo).filter(num => !isNaN(num));
+        return teklifNos.length > 0 ? Math.max(...teklifNos) + 1 : 10001;
+    };
+
+    const handleTeklifKaydet = async () => {
+        let yeniUrunler = [...urunListesi];
+        for (let urun of yeniUrunler) {
+            if (!urunler.some(u => u.urunAdi === urun.urunAdi)) {
+                const ekle = window.confirm(`${urun.urunAdi} adlı ürün listede yok. Eklemek ister misiniz?`);
+                if (ekle) {
+                    let barkod = "0000000000000";
+                    const barkodGir = window.confirm("Barkod girmek ister misiniz?");
+                    if (barkodGir) {
+                        barkod = prompt("Barkodu girin:") || "0000000000000";
+                    }
+                    await addDoc(collection(db, "urunler"), {
+                        urunAdi: urun.urunAdi,
+                        fiyat: parseFloat(urun.fiyat).toFixed(2),
+                        stok: 0,
+                        barkod: barkod
+                    });
+                    urun.barkod = barkod;
+                }
+            }
+        }
+        const teklifNo = await getNextTeklifNo();
+        await addDoc(collection(db, "teklifler"), {
+            musteriId: secilenMusteri,
+            urunler: yeniUrunler,
+toplamTutar: parseFloat(yeniUrunler.reduce((acc, urun) => acc + (parseFloat(urun.toplam) || 0), 0).toFixed(2)),
+
+
+            tarih: Date.now(),
+            teklifNo: teklifNo
+        });
+        alert("Teklif kaydedildi!");
+    };
+
+    return (
+        <div>
+            <h2>Yeni Teklif Ekle</h2>
+            <label>Müşteri: </label>
+            <select onChange={(e) => setSecilenMusteri(e.target.value)}>
+                <option value="">Seçiniz</option>
+                {musteriler.map(musteri => (
+                    <option key={musteri.id} value={musteri.id}>{musteri.musteriAdi}</option>
+                ))}
+            </select>
+
+            <label> Ürün: </label>
+            <select onChange={(e) => setSecilenUrun(urunler.find(u => u.id === e.target.value))}>
+                <option value="">Seçiniz</option>
+                {urunler.map(urun => (
+                    <option key={urun.id} value={urun.id}>{urun.urunAdi} - ₺{parseFloat(urun.fiyat).toFixed(2)}</option>
+                ))}
+            </select>
+            <button onClick={() => setUrunListesi(prevList => {
+                const yeniListe = [...prevList, { ...secilenUrun, miktar: 1, toplam: parseFloat(secilenUrun.fiyat).toFixed(2), barkod: secilenUrun.barkod || "0000000000000" }];
+                const yeniToplam = yeniListe.reduce((acc, urun) => acc + (urun.miktar * parseFloat(urun.fiyat)), 0);
+                setToplamTutar(yeniToplam.toFixed(2));
+                return yeniListe;
+            })}>Ürün Ekle</button>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Barkod</th>
+                        <th style={{ minWidth: "200px" }}>Ürün Adı</th>
+                        <th>Miktar</th>
+                        <th>Fiyat</th>
+                        <th>Toplam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {urunListesi.map((urun, index) => (
+                        <tr key={index}>
+                            <td>{urun.barkod}</td>
+                            <td><input type="text" value={urun.urunAdi} onChange={(e) => {
+                                const yeniListe = [...urunListesi];
+                                yeniListe[index].urunAdi = e.target.value;
+                                yeniListe[index].barkod = "";
+                                setUrunListesi(yeniListe);
+                                setToplamTutar(yeniListe.reduce((acc, urun) => acc + (urun.miktar * urun.fiyat), 0).toFixed(2));
+                            }} style={{ width: "100%" }} /></td>
+                            <td><input type="number" value={urun.miktar} onChange={(e) => {
+                                const yeniListe = [...urunListesi];
+                                yeniListe[index].miktar = parseFloat(e.target.value) || 0;
+                                yeniListe[index].toplam = (yeniListe[index].miktar * parseFloat(yeniListe[index].fiyat)).toFixed(2);
+                                setUrunListesi(yeniListe);
+                                setToplamTutar(yeniListe.reduce((acc, urun) => acc + (urun.miktar * urun.fiyat), 0).toFixed(2));
+                            }} /></td>
+                            <td><input type="number" value={parseFloat(urun.fiyat).toFixed(2)} onChange={(e) => {
+                                const yeniListe = [...urunListesi];
+                                yeniListe[index].fiyat = parseFloat(e.target.value) || 0;
+                                yeniListe[index].toplam = (yeniListe[index].miktar * yeniListe[index].fiyat).toFixed(2);
+                                setUrunListesi(yeniListe);
+                                setToplamTutar(yeniListe.reduce((acc, urun) => acc + (urun.miktar * urun.fiyat), 0).toFixed(2));
+                            }} /></td>
+                            <td>₺{parseFloat(urun.toplam).toFixed(2)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <h3>Toplam Tutar: ₺{parseFloat(toplamTutar).toFixed(2)}</h3>
+            <button onClick={handleTeklifKaydet}>Teklif Kaydet</button>
+        </div>
+    );
+};
+
+export default TeklifEkle;

@@ -1,0 +1,18 @@
+netstat -ano | findstr :3000
+
+
+
+taskkill /F /PID 7116
+taskkill /F /PID 1356
+
+
+
+npm start
+
+
+cd escafood-muhasebe
+
+
+
+
+https://console.firebase.google.com/u/0/project/escafood-muhasebe-2/firestore/databases/-default-/data/~2Fteklifler~2FShpyYDT6bQbSrB1nwfJr
