@@ -7,7 +7,7 @@ import autoTable from "jspdf-autotable";
 import "./MusteriDetay.css";
 import { useNavigate } from "react-router-dom";
 
-
+let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 120;
 const MusteriDetay = () => {
     const { id } = useParams();
     const [musteri, setMusteri] = useState(null);
@@ -198,7 +198,7 @@ autoTable(doc, {
 const today = new Date();
 const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
 
-let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 120;
+
 doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY);
 
 doc.setTextColor(...bakiyeRenk);
