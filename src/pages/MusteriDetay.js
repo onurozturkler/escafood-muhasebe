@@ -209,7 +209,9 @@ doc.text(
 );
 
     // 📌 PDF dosya adını müşteri adı + tarih olacak şekilde güncelle
-    doc.save(`HesapEkstresi_${musteri.musteriAdi}_${formattedDate}.pdf`);
+    const safeFileName = cleanText(musteri.musteriAdi);
+doc.save(`HesapEkstresi_${safeFileName}_${formattedDate}.pdf`);
+
 };
    
 
