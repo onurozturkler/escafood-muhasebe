@@ -7,6 +7,7 @@ import autoTable from "jspdf-autotable";
 import "./MusteriDetay.css";
 import { useNavigate } from "react-router-dom";
 
+onClick={() => previous ? navigate(previous) : navigate(-1)}
 
 let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 120;
 const MusteriDetay = () => {
