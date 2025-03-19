@@ -135,7 +135,8 @@ const musteriAdiWrapped = doc.splitTextToSize(cleanText(musteri.musteriAdi), max
   doc.setFont("helvetica", "normal");
 doc.setFontSize(10);
 doc.text(musteriAdiWrapped, 130, 60);
-doc.text(cleanText(`${musteri.adres}`), 145, 85);
+doc.text(cleanText(musteri.adres || ""), 145, 85);
+
 
 // ✅ `bakiye` değişkenini en başta tanımla (0 olarak başlat)
  
@@ -155,7 +156,7 @@ bakiye = -toplamTahsilatlar + toplamTeklifler + cariHesap;
 
 let finalY = 95;
 let hareketListesi = [
-    ["09.03.2025", "", "Açilis Bakiyesi", "", `${bakiye.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`]
+    ["16.03.2025", "", "Açilis Bakiyesi", "", `${bakiye.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`]
 ];
 
 hareketler
@@ -197,7 +198,9 @@ autoTable(doc, {
 const today = new Date();
 const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
 
-doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, doc.lastAutoTable.finalY + 10); // ✅ Pozisyon ayarlandı
+let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 120;
+doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY);
+
 doc.setTextColor(...bakiyeRenk);
 doc.text(
     `${bakiye.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`,
@@ -232,7 +235,7 @@ doc.text(
         </thead>
 <tbody>
   {hareketler.length > 0 ? (
-    hareketler.map((hareket) => (
+    hareketler?.length > 0 ? hareketler.map((hareket) => (
       <tr
         key={hareket.id}
         className={hareket.iptal ? "cancelled" : ""}
