@@ -154,10 +154,10 @@ const generatePDF = () => {
     });
 finalY = doc.lastAutoTable.finalY + 10; // Tablo sonrası boşluk bırak
 
+console.log("Hesap Bakiyesi:", hesapBakiyesi);
 
-    
-doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY);
 
+doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi: ${hesapBakiyesi.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`, 15, finalY);
 
     doc.save(`HesapEkstresi_${cleanText(musteri.musteriAdi)}_${formattedDate}.pdf`);
 };
