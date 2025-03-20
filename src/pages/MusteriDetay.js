@@ -8,7 +8,7 @@ import "./MusteriDetay.css";
 
 const cleanText = (text) => {
     if (!text) return "";
-    const turkishMap = { "Ç": "C", "Ğ": "G", "İ": "I", "Ö": "O", "Ş": "S", "Ü": "U", "ç": "c", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u" };
+    const turkishMap = { "Ç": "Ç", "Ğ": "G", "İ": "I", "Ö": "O", "Ş": "S", "Ü": "U", "ç": "ç", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u" };
     return text.split("").map(char => turkishMap[char] || char).join("");
 };
 
@@ -104,7 +104,7 @@ const generatePDF = () => {
     doc.text("Vergi No: 3770983099 (Etimesgut)", 14, 75);
 
     doc.setFont("helvetica", "bold");
-    doc.text("Sayın;", 130, 55);
+    doc.text("Sayin;", 130, 55);
     doc.text("Adres:", 130, 85);
     doc.setFont("helvetica", "normal");
 
@@ -148,7 +148,11 @@ const generatePDF = () => {
         headStyles: { fillColor: [41, 128, 185], textColor: [255, 255, 255] },
         alternateRowStyles: { fillColor: [240, 240, 240] }
     });
+finalY = doc.lastAutoTable.finalY + 10; // Tablo sonrası boşluk bırak
 
+doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY);
+
+    
     const today = new Date();
     const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
     doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY + 10);
