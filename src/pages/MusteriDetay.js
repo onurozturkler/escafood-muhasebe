@@ -145,6 +145,45 @@ const MusteriDetay = () => {
     return (
         <div className="musteri-detay">
             <h2>{musteri.musteriAdi} - Detayları</h2>
+
+    <h3 className="subtitle">Müşteri Hareketleri</h3>
+{hareketler.length > 0 ? (
+    <table className="styled-table">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Belge No</th>
+                <th>Tür</th>
+                <th>Tutar</th>
+                <th>Detay</th>
+            </tr>
+        </thead>
+        <tbody>
+            {hareketler.map((hareket) => (
+                <tr key={hareket.id}>
+                    <td>{formatDate(hareket.tarih)}</td>
+                    <td>{hareket.type === "teklif" ? hareket.teklifNo : hareket.tahsilatNo}</td>
+                    <td>{hareket.type === "teklif" ? "Teklif" : "Tahsilat"}</td>
+                    <td>
+                        ₺{parseFloat(
+                            hareket.type === "teklif" ? hareket.geneltoplamTutar : hareket.tahsilatTutari
+                        ).toLocaleString("tr-TR", { minimumFractionDigits: 2 })}
+                    </td>
+                    <td>
+                        {hareket.type === "teklif" ? (
+                            <button onClick={() => navigate(`/teklifler/detay/${hareket.id}`)}>Detay</button>
+                        ) : (
+                            <button onClick={() => navigate(`/tahsilatlar/detay/${hareket.id}`)}>Detay</button>
+                        )}
+                    </td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+) : (
+    <p style={{ color: "red", fontWeight: "bold" }}>Bu müşteriye ait teklif veya tahsilat hareketi bulunamadı.</p>
+)}
+
             <button onClick={generatePDF}>PDF İndir</button>
         </div>
     );
