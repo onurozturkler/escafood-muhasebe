@@ -6,6 +6,13 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import "./MusteriDetay.css";
 
+const cleanText = (text) => {
+    if (!text) return "";
+    const turkishMap = { "Ç": "C", "Ğ": "G", "İ": "I", "Ö": "O", "Ş": "S", "Ü": "U", "ç": "c", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u" };
+    return text.split("").map(char => turkishMap[char] || char).join("");
+};
+
+
 const MusteriDetay = () => {
     const { id } = useParams();
     const [musteri, setMusteri] = useState(null);
@@ -79,69 +86,75 @@ const MusteriDetay = () => {
     if (loading) return <p>Yükleniyor...</p>;
     if (!musteri) return <p className="text-red-500 font-bold">Müşteri bulunamadı!</p>;
 
-    const generatePDF = () => {
-        const doc = new jsPDF();
-        let finalY = 120; // 📌 **Buraya doğrudan tanımlandı**
+const generatePDF = () => {
+    const doc = new jsPDF();
+    let finalY = 120; 
 
-        doc.setFont("helvetica", "normal");
-        doc.addImage(escaFoodLogoBase64, "PNG", 10, 10, 40, 30);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(21);
-        doc.text("Hesap Ekstresi", 80, 30);
+    doc.setFont("helvetica", "normal");
+    doc.addImage(escaFoodLogoBase64, "PNG", 10, 10, 40, 30);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(21);
+    doc.text("Hesap Ekstresi", 80, 30);
 
-        doc.setFontSize(10);
-        doc.text("ESCA FOOD GIDA DIS TICARET", 14, 55);
-        doc.text("SANAYI ANONIM SIRKETI", 14, 60);
+    doc.setFontSize(10);
+    doc.text("ESCA FOOD GIDA DIS TICARET", 14, 55);
+    doc.text("SANAYI ANONIM SIRKETI", 14, 60);
+    doc.text("Yeni Baglica Mah Etimesgut Blv. No: 6H/A", 14, 65);
+    doc.text("Etimesgut, ANKARA – Türkiye", 14, 70);
+    doc.text("Vergi No: 3770983099 (Etimesgut)", 14, 75);
 
-        doc.text("Yeni Baglica Mah Etimesgut Blv. No: 6H/A", 14, 65);
-        doc.text("Etimesgut, ANKARA – Türkiye", 14, 70);
-        doc.text("Vergi No: 3770983099 (Etimesgut)", 14, 75);
+    doc.setFont("helvetica", "bold");
+    doc.text("Sayın;", 130, 55);
+    doc.text("Adres:", 130, 85);
+    doc.setFont("helvetica", "normal");
 
-        doc.setFont("helvetica", "bold");
-        doc.text("Sayın;", 130, 55);
-        doc.text("Adres:", 130, 85);
-        doc.setFont("helvetica", "normal");
+    doc.text(cleanText(musteri.musteriAdi), 130, 60);
+    doc.text(cleanText(musteri.adres || ""), 145, 85);
 
-        doc.text(musteri.musteriAdi, 130, 60);
-        doc.text(musteri.adres || "", 145, 85);
+    let toplamTahsilatlar = hareketler
+        .filter(h => h.type === "tahsilat" && !h.iptal)
+        .reduce((sum, h) => sum + parseFloat(h.tahsilatTutari || 0), 0);
 
-        let toplamTahsilatlar = hareketler
-            .filter(h => h.type === "tahsilat" && !h.iptal)
-            .reduce((sum, h) => sum + parseFloat(h.tahsilatTutari || 0), 0);
+    let toplamTeklifler = hareketler
+        .filter(h => h.type === "teklif" && !h.iptal)
+        .reduce((sum, h) => sum + parseFloat(h.geneltoplamTutar || 0), 0);
 
-        let toplamTeklifler = hareketler
-            .filter(h => h.type === "teklif" && !h.iptal)
-            .reduce((sum, h) => sum + parseFloat(h.geneltoplamTutar || 0), 0);
+    let cariHesap = parseFloat(musteri.carihesap || 0);
+    let hesapBakiyesi = -toplamTahsilatlar + toplamTeklifler + cariHesap;
 
-        let cariHesap = parseFloat(musteri.carihesap || 0);
-        bakiye = -toplamTahsilatlar + toplamTeklifler + cariHesap;
+    let hareketListesi = [
+        [formatDate(new Date()), "", "Açilis Bakiyesi", "", `${hesapBakiyesi.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`]
+    ];
 
-        let hareketListesi = [
-            ["16.03.2025", "", "Açilis Bakiyesi", "", `${bakiye.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`]
-        ];
+    hareketler.filter(hareket => !hareket.iptal).forEach(hareket => {
+        let tutar = parseFloat(hareket.type === "teklif" ? hareket.geneltoplamTutar : hareket.tahsilatTutari);
+        if (hareket.type === "teklif") hesapBakiyesi -= tutar;
+        else hesapBakiyesi += tutar;
 
-        hareketler.filter(hareket => !hareket.iptal).forEach(hareket => {
-            let tutar = parseFloat(hareket.type === "teklif" ? hareket.geneltoplamTutar : hareket.tahsilatTutari);
-            hareketListesi.push([
-                formatDate(hareket.tarih),
-                hareket.type === "teklif" ? hareket.teklifNo : (hareket.tahsilatNo || "-"),
-                hareket.type === "teklif" ? "Teklif" : "Tahsilat",
-                `${tutar.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`,
-                `${bakiye.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`
-            ]);
-        });
+        hareketListesi.push([
+            formatDate(hareket.tarih),
+            hareket.type === "teklif" ? hareket.teklifNo : (hareket.tahsilatNo || "-"),
+            hareket.type === "teklif" ? "Teklif" : "Tahsilat",
+            `${tutar.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`,
+            `${hesapBakiyesi.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`
+        ]);
+    });
 
-        autoTable(doc, {
-            startY: finalY,
-            head: [["Tarih", "Belge No", "Tür", "Tutar", "Bakiye"]],
-            body: hareketListesi
-        });
+    autoTable(doc, {
+        startY: finalY,
+        head: [["Tarih", "Belge No", "Tür", "Tutar", "Bakiye"]],
+        body: hareketListesi,
+        styles: { font: "helvetica", fontSize: 10 },
+        headStyles: { fillColor: [41, 128, 185], textColor: [255, 255, 255] },
+        alternateRowStyles: { fillColor: [240, 240, 240] }
+    });
 
-        const today = new Date();
-        const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
-        doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY + 10);
-        doc.save(`HesapEkstresi_${musteri.musteriAdi}_${formattedDate}.pdf`);
-    };
+    const today = new Date();
+    const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+    doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY + 10);
+
+    doc.save(`HesapEkstresi_${cleanText(musteri.musteriAdi)}_${formattedDate}.pdf`);
+};
 
     return (
         <div className="musteri-detay">
