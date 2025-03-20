@@ -82,27 +82,27 @@ const cleanText = (text) => {
   const generatePDF = () => {
     const doc = new jsPDF();
   doc.addImage(escaFoodLogoBase64, "PNG", 10, 5, 52, 40);
-  doc.setFont("arial", "bold");
+  doc.setFont("Helvetica", "bold");
 doc.setFontSize(12);    
 doc.text(cleanText("ESCA FOOD GIDA DIS TICARET"), 14, 55);
 doc.text(cleanText("SANAYI ANONIM SIRKETI"), 14, 60);
 
-  doc.setFont("arial", "normal");
+  doc.setFont("Helvetica", "normal");
 doc.setFontSize(12);  
   doc.text(cleanText("Yeni Baglica Mah Etimesgut Blv. No: 6H/A"), 14, 65);
   doc.text(cleanText("Etimesgut, ANKARA – Türkiye"), 14, 70);
   doc.text(cleanText("Vergi No: 3770983099 (Etimesgut)"), 14, 75);
 
 doc.setFontSize(21);
-  doc.setFont("arial", "bold");
+  doc.setFont("Helvetica", "bold");
     doc.text(`Teklif`, 90, 30);
   doc.setFontSize(13);
-doc.setFont("arial", "bold");
+doc.setFont("Helvetica", "bold");
     doc.text(`Teklif No:${teklif.teklifNo}`, 130, 40);
-doc.setFont("arial", "bold");
+doc.setFont("Helvetica", "bold");
     doc.text(`Sayin;`, 130, 55);
 doc.text(`Adres:`, 130, 85);
-doc.setFont("arial", "normal");
+doc.setFont("Helvetica", "normal");
 
 doc.text(doc.splitTextToSize(cleanText(teklif.musteriAdi), maxWidth), 130, 60);
 doc.text(cleanText(teklif.musteriAdres), 145, 85);
@@ -130,7 +130,7 @@ autoTable(doc, {
 });
 
   doc.setFontSize(12);
-doc.setFont("arial", "bold");    
+doc.setFont("Helvetica", "bold");    
 doc.text(`Toplam Tutar: ${formatCurrency(teklif.toplamTutar)} TL`, 20, 165);
     doc.text(`Iskonto Tutari: ${formatCurrency(teklif.iskontoTutar)} TL`, 20, 170);
     doc.text(`Genel Toplam Tutar: ${formatCurrency(teklif.geneltoplamTutar)} TL`, 20, 175);
@@ -150,7 +150,7 @@ doc.text(`Toplam Tutar: ${formatCurrency(teklif.toplamTutar)} TL`, 20, 165);
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "auto", fontFamily: "Arial, sans-serif" }}>
+    <div style={{ padding: "20px", maxWidth: "800px", margin: "auto", fontFamily: "Helvetica, sans-serif" }}>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Teklif</h2>
       <p><strong>Teklif No:</strong> {teklif.teklifNo || "Bilinmiyor"}</p>
       <p><strong>Tarih:</strong> {new Date(teklif.tarih).toLocaleDateString("tr-TR")}</p>
