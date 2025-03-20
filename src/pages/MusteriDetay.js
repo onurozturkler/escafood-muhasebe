@@ -140,6 +140,10 @@ const generatePDF = () => {
         ]);
     });
 
+
+    const today = new Date();
+    const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+    
     autoTable(doc, {
         startY: finalY,
         head: [["Tarih", "Belge No", "Tür", "Tutar", "Bakiye"]],
@@ -150,12 +154,10 @@ const generatePDF = () => {
     });
 finalY = doc.lastAutoTable.finalY + 10; // Tablo sonrası boşluk bırak
 
-doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY);
 
     
-    const today = new Date();
-    const formattedDate = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
-    doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY + 10);
+doc.text(`${formattedDate} Tarihli Cari Hesap Bakiyesi:`, 15, finalY);
+
 
     doc.save(`HesapEkstresi_${cleanText(musteri.musteriAdi)}_${formattedDate}.pdf`);
 };
