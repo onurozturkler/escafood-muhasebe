@@ -5,6 +5,9 @@ import { db } from "../firebase";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
+console.log(new jsPDF().getFontList());
+
+
 const cleanText = (text: string | undefined): string => {
     if (!text) return "-";
     try {
