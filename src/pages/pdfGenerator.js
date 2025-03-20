@@ -1,25 +1,10 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
-
-
-// 📌 Base64 formatındaki DejaVuSans fontunu ekleyin
-import DejaVuSansBase64 from "../lib/DejaVuSansbase64.txt";
-
-const loadFonts = (doc) => {
-    doc.addFileToVFS("DejaVuSans.ttf", DejaVuSansBase64);
-    doc.addFont("DejaVuSans.ttf", "DejaVuSans", "normal");
-    doc.setFont("helvatica", "normal");
-};
-
-console.log(DejaVuSansBase64.slice(0, 100)); // İlk 100 karakteri yazdır
-console.log(doc.getFontList());
-
 export function generateTahsilatPDF(tahsilat, musteri) {
     const doc = new jsPDF();
 
-    loadFonts(doc); // ✅ Özel fontu yükle
-    doc.setFont("helvatica", "normal"); // 📌 Türkçe karakter desteği
+    doc.setFont("helvetica", "normal"); // ✅ Doğru font adı kullanıldı
 
     const cleanText = (text) => {
         if (!text) return "-";
@@ -72,7 +57,4 @@ export function generateTahsilatPDF(tahsilat, musteri) {
     doc.text(`Tahsilat Sonrası Cari Hesap: ${tahsilatSonrasiCariHesap}`, 14, finalY + 20);
 
     doc.save(`Tahsilat_Makbuzu_${cleanText(tahsilat.tahsilatNo) || "Bilinmiyor"}.pdf`);
-
-
-
 }
