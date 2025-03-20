@@ -8,14 +8,14 @@ import DejaVuSansBase64 from "../lib/DejaVuSansbase64.txt";
 const loadFonts = (doc) => {
     doc.addFileToVFS("DejaVuSans.ttf", DejaVuSansBase64);
     doc.addFont("DejaVuSans.ttf", "DejaVuSans", "normal");
-    doc.setFont("DejaVuSans", "normal");
+    doc.setFont("helvatica", "normal");
 };
 
 export function generateTahsilatPDF(tahsilat, musteri) {
     const doc = new jsPDF();
 
     loadFonts(doc); // ✅ Özel fontu yükle
-    doc.setFont("DejaVuSans", "normal"); // 📌 Türkçe karakter desteği
+    doc.setFont("helvatica", "normal"); // 📌 Türkçe karakter desteği
 
     const cleanText = (text) => {
         if (!text) return "-";
