@@ -1,8 +1,7 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
-console.log(DejaVuSansBase64.slice(0, 100)); // İlk 100 karakteri yazdır
-console.log(doc.getFontList());
+
 
 // 📌 Base64 formatındaki DejaVuSans fontunu ekleyin
 import DejaVuSansBase64 from "../lib/DejaVuSansbase64.txt";
@@ -12,6 +11,9 @@ const loadFonts = (doc) => {
     doc.addFont("DejaVuSans.ttf", "DejaVuSans", "normal");
     doc.setFont("helvatica", "normal");
 };
+
+console.log(DejaVuSansBase64.slice(0, 100)); // İlk 100 karakteri yazdır
+console.log(doc.getFontList());
 
 export function generateTahsilatPDF(tahsilat, musteri) {
     const doc = new jsPDF();
