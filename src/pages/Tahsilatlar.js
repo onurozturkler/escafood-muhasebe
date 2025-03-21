@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDoc, getDocs, doc, updateDoc } from "firebase/firestore";
 import TahsilatEkle from "./TahsilatEkle";
+import "../index.css";
 
 const Tahsilatlar = () => {
     const [tahsilatlar, setTahsilatlar] = useState([]);
