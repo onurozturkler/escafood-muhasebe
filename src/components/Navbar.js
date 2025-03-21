@@ -21,7 +21,7 @@ function Navbar() {
         </Link>
 
         {/* ✅ Masaüstü Menü */}
-   <div className="flex justify-center space-x-6 mt-6 button-container">
+ <div className="flex justify-center space-x-6 mt-6 button-container">
   {navLinks.map((item, index) => (
     <button 
       key={index} 
@@ -32,6 +32,7 @@ function Navbar() {
     </button>
   ))}
 </div>
+
 
 
      
