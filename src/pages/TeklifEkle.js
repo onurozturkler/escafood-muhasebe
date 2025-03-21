@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDocs, addDoc, doc, updateDoc, getDoc, query, orderBy } from "firebase/firestore";
 import "./TeklifEkle.css";
+import "../index.css";
 
 
 function TeklifEkle() {
