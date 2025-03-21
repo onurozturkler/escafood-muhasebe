@@ -124,7 +124,7 @@ const generatePDF = () => {
     let hesapBakiyesi = -toplamTahsilatlar + toplamTeklifler + cariHesap;
 
     let hareketListesi = [
-        [formatDate(new Date()), "", "Açilis Bakiyesi", "", `${hesapBakiyesi.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`]
+        ["19.03.2025", "", "Açilis Bakiyesi", "", `${hesapBakiyesi.toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`]
     ];
 
     hareketler.filter(hareket => !hareket.iptal).forEach(hareket => {
