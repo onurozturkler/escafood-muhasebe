@@ -15,7 +15,8 @@ function Navbar() {
           <img 
             src="https://esca-food.com/image/catalog/esca-food-logo.png" 
             alt="EscaFood Logo" 
-  className="w-[166px] h-[129px] md:w-[333px] md:h-[259px]"
+ width="80"
+    height="50"
           />
         </Link>
 
