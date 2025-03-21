@@ -15,7 +15,7 @@ function Navbar() {
           <img 
             src="https://esca-food.com/image/catalog/esca-food-logo.png" 
             alt="EscaFood Logo" 
-            className="h-6 w-auto"
+            className="h-6 w-auto transform scale-35"
           />
         </Link>
 
