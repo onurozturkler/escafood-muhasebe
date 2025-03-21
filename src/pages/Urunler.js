@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore";
 import * as XLSX from "xlsx";
+import "../index.css";
 
 function Urunler() {
   const [urunler, setUrunler] = useState([]);
