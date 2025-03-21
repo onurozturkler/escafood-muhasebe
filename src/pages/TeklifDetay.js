@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import "../index.css";
 
 console.log(new jsPDF().getFontList());
 
