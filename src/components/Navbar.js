@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+
 
 function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -15,7 +15,7 @@ function Navbar() {
           <img 
             src="https://esca-food.com/image/catalog/esca-food-logo.png" 
             alt="EscaFood Logo" 
-            className="h-16 w-auto"
+            className="h-6 w-auto"
           />
         </Link>
 
