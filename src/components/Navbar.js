@@ -1,41 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../index.css";
+import "../index.css"; // ✅ CSS dosyanı dahil ettiğinden emin ol
 
 function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const updatePadding = () => {
-      const navbar = document.querySelector(".navbar");
-      if (navbar) {
-        document.body.style.paddingTop = navbar.offsetHeight + "px";
+    const handleScroll = () => {
+      if (window.innerWidth <= 768 && window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
       }
     };
 
-    updatePadding(); // Sayfa yüklendiğinde çalıştır
-    window.addEventListener("resize", updatePadding); // Ekran boyutu değiştiğinde güncelle
-
-    return () => {
-      window.removeEventListener("resize", updatePadding);
-    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isScrolled ? "mobile-small" : ""}`}>
       <div className="navbar-container">
+        {/* ✅ LOGO */}
         <Link to="/" className="logo">
-          <img
-            src="https://esca-food.com/image/catalog/esca-food-logo.png"
+          <img 
+            src="https://esca-food.com/image/catalog/esca-food-logo.png" 
             alt="EscaFood Logo"
-            width="190"
-            height="150"
+            className={`logo-img ${isScrolled ? "mobile-small" : ""}`}
           />
         </Link>
 
-        <div className="button-container">
+        {/* ✅ Butonlar */}
+        <div className={`button-container ${isScrolled ? "mobile-small" : ""}`}>
           {navLinks.map((item, index) => (
-            <button key={index} onClick={() => navigate(item.to)} className="custom-button">
+            <button 
+              key={index} 
+              onClick={() => navigate(item.to)}
+              className={`custom-button ${isScrolled ? "mobile-small" : ""}`}
+            >
               {item.text}
             </button>
           ))}
