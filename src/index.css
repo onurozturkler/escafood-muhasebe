@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 .button-container {
     display: flex;
     gap: 15px;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .custom-button {
@@ -9,32 +12,29 @@
     background-color: red;
     color: white;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 700; /* Daha kalın font */
+    font-family: 'Poppins', sans-serif; /* Google Font eklendi */
+    letter-spacing: 0.5px; /* Harfler arasında boşluk */
     border: none;
     padding: 15px 25px;
     border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 5px 5px 0px navy;
 }
 
-.custom-button::after {
-    content: "";
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 100%;
-    height: 100%;
-    background-color: navy;
-    border-radius: 10px;
-    z-index: -1;
-    transition: all 0.3s ease-in-out;
-}
-
+/* Hover efekti */
 .custom-button:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 7px 7px 0px navy;
 }
 
-.custom-button:hover::after {
-    top: 4px;
-    left: 4px;
+/* Mobil uyumluluk */
+@media (max-width: 768px) {
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
+
+
