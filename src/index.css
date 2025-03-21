@@ -1,5 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
+.navbar {
+    background: linear-gradient(to right, #003366, #0055aa); 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 50;
+    padding: 15px;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo img {
+    height: 150px;
+    width: 190px;
+}
+
 .button-container {
     display: flex;
     gap: 15px;
@@ -23,10 +46,8 @@
     box-shadow: 5px 5px 0px navy;
 }
 
-/* Hover efekti */
 .custom-button:hover {
-    transform: translateY(-4px);
-    box-shadow: 7px 7px 0px navy;
+    transform: translateY(-3px);
 }
 
 /* Mobil uyumluluk */
@@ -36,5 +57,3 @@
         gap: 10px;
     }
 }
-
-
