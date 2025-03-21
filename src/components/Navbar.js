@@ -21,19 +21,18 @@ function Navbar() {
         </Link>
 
         {/* ✅ Masaüstü Menü */}
-        <div className="flex justify-center space-x-6 mt-6">
-          {navLinks.map((item, index) => (
-            <button 
-              key={index} 
-              onClick={() => navigate(item.to)}
-              className="bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg shadow-blue-900
-                 text-lg font-semibold transition-all duration-300 
-                 hover:bg-red-500 hover:scale-105"
-            >
-              {item.text}
-            </button>
-          ))}
-        </div>
+   <div className="flex justify-center space-x-6 mt-6 button-container">
+  {navLinks.map((item, index) => (
+    <button 
+      key={index} 
+      onClick={() => navigate(item.to)}
+      className="custom-button"
+    >
+      {item.text}
+    </button>
+  ))}
+</div>
+
 
      
 
