@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDocs, doc, updateDoc, getDoc } from "firebase/firestore";
+import "../index.css";
 
 const Teklifler = () => {
     const [teklifler, setTeklifler] = useState([]);
