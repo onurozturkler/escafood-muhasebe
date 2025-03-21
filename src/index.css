@@ -9,6 +9,11 @@
     z-index: 50;
     padding: 15px;
 }
+body {
+    padding-top: 0px; /* JavaScript otomatik ayarlayacak */
+    transition: padding-top 0.3s ease-in-out; /* Yumuşak geçiş efekti */
+}
+
 
 .navbar-container {
     display: flex;
@@ -19,8 +24,11 @@
 }
 
 .logo img {
+    padding: 0; /* Padding tamamen sıfır */
+    margin: 0;  /* Margin tamamen sıfır */
     height: 150px;
     width: 190px;
+    display: block; /* Gereksiz boşlukları engeller */
 }
 
 .button-container {
