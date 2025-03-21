@@ -58,10 +58,47 @@ body {
     transform: translateY(-3px);
 }
 
-/* Mobil uyumluluk */
+/* Mobilde Navbar'ı Daha Küçük Yap */
 @media (max-width: 768px) {
-    .button-container {
+    .navbar {
+        height: 60px; /* Daha az yer kaplasın */
+        padding: 5px;
+    }
+
+    .logo img {
+        height: 50px;
+        width: auto;
+    }
+
+    /* Masaüstü Menü Mobilde Gizlenecek */
+    .desktop-menu {
+        display: none;
+    }
+
+    /* Hamburger Menü */
+    .hamburger-menu {
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+    }
+
+    /* Açılır Mobil Menü */
+    .mobile-menu {
+        display: flex;
         flex-direction: column;
-        gap: 10px;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: navy;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .mobile-menu .custom-button {
+        margin: 5px 0;
+        width: 90%;
     }
 }
