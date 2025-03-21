@@ -1,43 +1,37 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import "../index.css"; // ✅ CSS'in Yüklendiğinden Emin Ol
 
 function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   return (
-    <nav className="bg-gradient-to-r from-blue-800 to-blue-600 shadow-md fixed w-full top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center px-6 py-3">
+    <nav className="navbar">
+      <div className="navbar-container">
         
         {/* ✅ LOGO */}
-        <Link to="/" className="flex items-center space-x-3">
+        <Link to="/" className="logo">
           <img 
             src="https://esca-food.com/image/catalog/esca-food-logo.png" 
             alt="EscaFood Logo" 
- width="190"
-    height="150"
+            width="190"
+            height="150"
           />
         </Link>
 
         {/* ✅ Masaüstü Menü */}
- <div className="flex justify-center space-x-6 mt-6 button-container">
-  {navLinks.map((item, index) => (
-    <button 
-      key={index} 
-      onClick={() => navigate(item.to)}
-      className="custom-button"
-    >
-      {item.text}
-    </button>
-  ))}
-</div>
-
-
-
-     
-
-   
+        <div className="button-container">
+          {navLinks.map((item, index) => (
+            <button 
+              key={index} 
+              onClick={() => navigate(item.to)}
+              className="custom-button"
+            >
+              {item.text}
+            </button>
+          ))}
+        </div>
       </div>
     </nav>
   );
