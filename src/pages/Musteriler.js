@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDocs, deleteDoc, doc, addDoc } from "firebase/firestore";
+import "../index.css";
 import * as XLSX from "xlsx";
 
 const Musteriler = () => {
