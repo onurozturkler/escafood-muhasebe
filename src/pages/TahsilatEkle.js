@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDoc, getDocs, addDoc, doc, updateDoc } from "firebase/firestore";
+import "../index.css";
 
 
 
