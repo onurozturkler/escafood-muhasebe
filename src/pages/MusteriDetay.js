@@ -5,6 +5,7 @@ import { collection, getDocs, getDoc, doc, query, orderBy, where } from "firebas
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import "./MusteriDetay.css";
+import "../index.css";
 
 const cleanText = (text) => {
     if (!text) return "";
