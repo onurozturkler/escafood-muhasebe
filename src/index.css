@@ -24,12 +24,15 @@ body {
 }
 
 .logo img {
-    padding: 0; /* Padding tamamen sıfır */
-    margin: 0;  /* Margin tamamen sıfır */
+    padding: 0;
+    margin: 0;
     height: 150px;
     width: 190px;
-    display: block; /* Gereksiz boşlukları engeller */
+    display: block;
+    position: relative;
+    top: 0; /* Logoyu yukarı yapıştırır */
 }
+
 
 .button-container {
     display: flex;
@@ -53,6 +56,9 @@ body {
     cursor: pointer;
     transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
     box-shadow: 6px 6px 0px navy;
+    width: 180px; /* Sabit genişlik */
+    height: 60px; /* Sabit yükseklik */
+
 }
 
 .custom-button:hover {
@@ -70,6 +76,7 @@ button {
     box-shadow: 4px 4px 0px navy;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    
 }
 
 button:hover {
@@ -90,48 +97,62 @@ label {
     transition: all 0.3s ease-in-out;
 }
 
+/* 🌟 Genel Input Stilleri */
+input {
+    font-family: 'Poppins', sans-serif; /* Aynı font */
+    font-size: 16px;
+    font-weight: 600; /* Daha belirgin yazı */
+    color: black;
+    background-color: white;
+    border: 2px solid navy; /* Butonların shadow rengiyle uyumlu */
+    padding: 12px 20px;
+    border-radius: 10px; /* Butonlarla aynı yuvarlaklık */
+    box-shadow: 4px 4px 0px navy; /* Butonlar ile aynı gölge efekti */
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 🌟 Input Placeholder Stili (Yazı Girilmemiş Halde) */
+input::placeholder {
+    color: gray;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 🌟 Input'a Tıklanınca */
+input:focus {
+    background-color: #f9f9f9; /* Hafif açık gri */
+    box-shadow: 2px 2px 0px navy; /* Gölgede küçülme efekti */
+    transform: translateY(-2px); /* Hafif yukarı kalkma efekti */
+}
 
 /* Mobilde Navbar'ı Daha Küçük Yap */
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-        padding: 5px 0;
-    }
-    .logo img {
-        height: 120px;
-        width: auto;
+    .navbar.mobile-small {
+        padding: 5px; /* Navbar küçülecek */
+        transform: translateY(-40px); /* Yukarı kaydır */
     }
 
-    /* Masaüstü Menü Mobilde Gizlenecek */
-    .desktop-menu {
-        display: none;
+    .logo-img.mobile-small {
+        height: 75px;
+        width: 95px;
     }
 
-    /* Hamburger Menü */
-    .hamburger-menu {
-        font-size: 24px;
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
+    .button-container.mobile-small .custom-button {
+        font-size: 12px;
+        padding: 10px 18px;
+        box-shadow: 3px 3px 0px navy;
+    }
+    
+     input {
+        font-size: 14px;
+        padding: 10px 15px;
+        box-shadow: 3px 3px 0px navy; /* Mobilde gölge biraz küçüldü */
     }
 
-    /* Açılır Mobil Menü */
-    .mobile-menu {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        background: navy;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .mobile-menu .custom-button {
-        margin: 5px 0;
-        width: 90%;
+    input::placeholder {
+        font-size: 12px;
     }
 }
