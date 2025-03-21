@@ -57,7 +57,24 @@ body {
 .custom-button:hover {
     transform: translateY(-3px);
 }
+button {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 0px navy;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
 
+button:hover {
+    transform: translateY(-3px);
+    background-color: #ff3333;
+}
 /* Mobilde Navbar'ı Daha Küçük Yap */
 @media (max-width: 768px) {
     .navbar {
