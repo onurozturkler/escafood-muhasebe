@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import "../index.css";
 
 export function generateTahsilatPDF(tahsilat, musteri) {
     const doc = new jsPDF();
