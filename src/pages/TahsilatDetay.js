@@ -4,6 +4,7 @@ import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { generateTahsilatPDF } from "../lib/pdfGenerator";
 import "../styles/TahsilatDetay.css";
+import "../index.css";
 
 const TahsilatDetay = () => {
   const { id } = useParams();
