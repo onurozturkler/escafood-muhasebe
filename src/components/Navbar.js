@@ -32,39 +32,9 @@ function Navbar() {
           ))}
         </div>
 
-        {/* ✅ Mobil Menü Açma/Kapama Butonu */}
-        <button 
-          className="md:hidden text-white focus:outline-none" 
-          onClick={() => setMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X size={30} /> : <Menu size={30} />}
-        </button>
-      </div>
+     
 
-      {/* ✅ Mobil Menü (Animasyonlu Aç/Kapa) */}
-      <div className={`md:hidden fixed top-0 left-0 w-full h-screen bg-blue-900 bg-opacity-95 z-40 transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300`}>
-        <div className="flex flex-col items-center space-y-6 mt-24">
-          {navLinks.map((item, index) => (
-            <button 
-              key={index} 
-              onClick={() => {
-                navigate(item.to);
-                setMenuOpen(false);
-              }}
-              className="bg-yellow-400 text-black px-6 py-3 rounded-lg shadow-md text-lg font-semibold w-3/4 text-center hover:bg-white hover:text-blue-700 transition-all duration-300"
-            >
-              {item.text}
-            </button>
-          ))}
-        </div>
-
-        {/* ❌ Kapatma Butonu */}
-        <button 
-          className="absolute top-6 right-6 text-white text-3xl"
-          onClick={() => setMenuOpen(false)}
-        >
-          ✖
-        </button>
+   
       </div>
     </nav>
   );
