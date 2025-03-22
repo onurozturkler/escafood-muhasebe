@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../index.css"; // ✅ CSS dosyanı dahil ettiğinden emin ol
+import "../index.css";
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,7 +21,7 @@ function Navbar() {
 
   return (
     <nav className={`navbar ${isScrolled ? "mobile-small" : ""}`}>
-      <div className="navbar-container">
+      <div className={`navbar-container ${isScrolled ? "mobile-small" : ""}`}>
         {/* ✅ LOGO */}
         <Link to="/" className="logo">
           <img 
