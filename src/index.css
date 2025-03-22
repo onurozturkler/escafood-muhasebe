@@ -139,8 +139,13 @@ input:focus {
   }
 
   .logo-img.mobile-small {
-    height: 75px;
-    width: 95px;
+    height: 95px;
+    width: 120px;
+    padding: 0;
+    margin: 0;
+    display: block;
+    position: relative;
+    top: 0; 
   }
 
   .button-container.mobile-small {
@@ -150,8 +155,9 @@ input:focus {
   }
 
   .custom-button {
-    width: 120px; /* Sabit genişlik */
-    height: 40px; /* Sabit yükseklik */
+    font-size: 10px;
+    width: 100px; /* Sabit genişlik */
+    height: 33px; /* Sabit yükseklik */
   }
 
   input {
