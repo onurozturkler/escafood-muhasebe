@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
+body, button, input, label, textarea, select, table, th, td {
+    font-family: 'Poppins', sans-serif;
+}
 .navbar {
     background: linear-gradient(to right, #003366, #0055aa); 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -100,12 +103,12 @@ label {
 /* 🌟 Genel Input Stilleri */
 input {
     font-family: 'Poppins', sans-serif; /* Aynı font */
-    font-size: 16px;
-    font-weight: 600; /* Daha belirgin yazı */
+    font-size: 13px;
+    font-weight: 500; /* Daha belirgin yazı */
     color: black;
     background-color: white;
     border: 2px solid navy; /* Butonların shadow rengiyle uyumlu */
-    padding: 12px 20px;
+    padding: 9px 15px;
     border-radius: 10px; /* Butonlarla aynı yuvarlaklık */
     box-shadow: 4px 4px 0px navy; /* Butonlar ile aynı gölge efekti */
     outline: none;
