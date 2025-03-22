@@ -12,6 +12,26 @@ import MusteriDetay from "./pages/MusteriDetay";
 import Urunler from "./pages/Urunler";
 import TeklifEkle from "./pages/TeklifEkle";
 
+function handleNavbarScroll() {
+    const navbar = document.querySelector(".navbar");
+    const logo = document.querySelector(".logo-img");
+    const body = document.body;
+
+    if (window.scrollY > 30) {
+        navbar.classList.add("mobile-small");
+        logo?.classList.add("mobile-small");
+        body.style.paddingTop = "80px";
+    } else {
+        navbar.classList.remove("mobile-small");
+        logo?.classList.remove("mobile-small");
+        body.style.paddingTop = "150px";
+    }
+}
+
+window.addEventListener("load", handleNavbarScroll);
+window.addEventListener("scroll", handleNavbarScroll);
+window.addEventListener("resize", handleNavbarScroll);
+
 function App() {
   return (
     <Router>
