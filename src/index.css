@@ -163,17 +163,17 @@ input[type="file"] {
         align-items: flex-start;
         max-width: 100%;
         margin: 0 auto;
-        padding-top: 0;
+        padding-top: 2px;
         padding-bottom: 10px;
     }
 
     .logo-img.mobile-small {
-        height: 95px;
+        height: 95px !important;
         width: 120px;
-        padding: 0;
-        margin: 0;
+        padding: 1px;
+        margin: 1px;
         display: block;
-        top: 0;
+        top: 1px;
     }
 
     .button-container.mobile-small {
