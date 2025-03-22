@@ -32,6 +32,7 @@ body {
     margin: 0 auto;
     padding-top: 0;
     padding-bottom: 15px;
+    top: 0;
 }
 
 /* 🌟 Logo */
@@ -179,11 +180,12 @@ input[type="file"] {
         box-shadow: 3px 3px 0px navy;
     }
 
-    .custom-button {
-        font-size: 10px;
-        width: 100px;
-        height: 33px;
-    }
+.custom-button.mobile-small {
+    font-size: 10px;
+    width: 100px;
+    height: 33px;
+}
+
 
     input {
         font-size: 14px;
