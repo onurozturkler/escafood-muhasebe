@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
+/* 🌟 Tüm öğelere Poppins fontu */
 body, button, input, label, textarea, select, table, th, td {
     font-family: 'Poppins', sans-serif;
 }
+
+/* 🌟 Navbar */
 .navbar {
     background: linear-gradient(to right, #003366, #0055aa); 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -10,33 +13,38 @@ body, button, input, label, textarea, select, table, th, td {
     width: 100%;
     top: 0;
     z-index: 50;
-    padding: 15px;
+    padding-top: 0;
+    padding-bottom: 15px;
 }
+
+/* 🌟 Sayfa içeriğini aşağı it */
 body {
-    padding-top: 0px; /* JavaScript otomatik ayarlayacak */
-    transition: padding-top 0.3s ease-in-out; /* Yumuşak geçiş efekti */
+    padding-top: 0px;
+    transition: padding-top 0.3s ease-in-out;
 }
 
-
+/* 🌟 Navbar içeriği */
 .navbar-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     max-width: 1200px;
     margin: 0 auto;
+    padding-top: 0;
+    padding-bottom: 15px;
 }
 
+/* 🌟 Logo */
 .logo img {
     padding: 0;
     margin: 0;
     height: 150px;
     width: 190px;
     display: block;
-    position: relative;
-    top: 0; /* Logoyu yukarı yapıştırır */
+    top: 0;
 }
 
-
+/* 🌟 Navbar butonları */
 .button-container {
     display: flex;
     gap: 15px;
@@ -45,30 +53,30 @@ body {
     flex-wrap: wrap;
 }
 
+/* 🌟 Büyük butonlar (Ana butonlar) */
 .custom-button {
     position: relative;
     background-color: red;
     color: white;
     font-size: 18px;
-    font-weight: 700; /* Daha kalın font */
-    font-family: 'Poppins', sans-serif; /* Google Font eklendi */
-    letter-spacing: 0.5px; /* Harfler arasında boşluk */
+    font-weight: 700;
+    letter-spacing: 0.5px;
     border: none;
     padding: 15px 25px;
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
     box-shadow: 6px 6px 0px navy;
-    width: 180px; /* Sabit genişlik */
-    height: 60px; /* Sabit yükseklik */
-
+    width: 180px;
+    height: 60px;
 }
 
 .custom-button:hover {
     transform: translateY(-3px);
 }
+
+/* 🌟 Küçük genel butonlar (Sil, Detay, Ekle...) */
 button {
-    font-family: 'Poppins', sans-serif;
     font-size: 10px;
     font-weight: 700;
     background-color: red;
@@ -79,7 +87,6 @@ button {
     box-shadow: 4px 4px 0px navy;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    
 }
 
 button:hover {
@@ -87,8 +94,8 @@ button:hover {
     background-color: #ff3333;
 }
 
+/* 🌟 Label */
 label {
-    font-family: 'Poppins', sans-serif;
     font-size: 10px;
     font-weight: 700;
     color: navy;
@@ -100,73 +107,91 @@ label {
     transition: all 0.3s ease-in-out;
 }
 
-/* 🌟 Genel Input Stilleri */
+/* 🌟 Input */
 input {
-    font-family: 'Poppins', sans-serif; /* Aynı font */
     font-size: 13px;
-    font-weight: 500; /* Daha belirgin yazı */
+    font-weight: 500;
     color: black;
     background-color: white;
-    border: 2px solid navy; /* Butonların shadow rengiyle uyumlu */
+    border: 2px solid navy;
     padding: 9px 15px;
-    border-radius: 10px; /* Butonlarla aynı yuvarlaklık */
-    box-shadow: 4px 4px 0px navy; /* Butonlar ile aynı gölge efekti */
+    border-radius: 10px;
+    box-shadow: 4px 4px 0px navy;
     outline: none;
     transition: all 0.3s ease-in-out;
 }
 
-/* 🌟 Input Placeholder Stili (Yazı Girilmemiş Halde) */
+/* 🌟 Placeholder */
 input::placeholder {
     color: gray;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.5px;
-    transition: all 0.3s ease-in-out;
 }
 
-/* 🌟 Input'a Tıklanınca */
+/* 🌟 Input focus */
 input:focus {
-    background-color: #f9f9f9; /* Hafif açık gri */
-    box-shadow: 2px 2px 0px navy; /* Gölgede küçülme efekti */
-    transform: translateY(-2px); /* Hafif yukarı kalkma efekti */
+    background-color: #f9f9f9;
+    box-shadow: 2px 2px 0px navy;
+    transform: translateY(-2px);
 }
 
-/* Mobilde Navbar'ı Daha Küçük Yap */
+/* 🌟 Dosya input */
+input[type="file"] {
+    border: 2px solid navy;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 4px 4px 0px navy;
+}
+
+/* 📱 Mobil Görünüm */
 @media (max-width: 768px) {
-  .navbar.mobile-small {
-    padding: 5px; /* Navbar küçülecek */
-    transform: translateY(-40px); /* Yukarı kaydır */
-  }
+    .navbar.mobile-small {
+        padding: 5px;
+        transform: translateY(-40px);
+    }
 
-  .logo-img.mobile-small {
-    height: 95px;
-    width: 120px;
-    padding: 0;
-    margin: 0;
-    display: block;
-    position: relative;
-    top: 0; 
-  }
+    .navbar-container.mobile-small {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        max-width: 100%;
+        margin: 0 auto;
+        padding-top: 0;
+        padding-bottom: 10px;
+    }
 
-  .button-container.mobile-small {
-    font-size: 12px;
-    padding: 10px 18px;
-    box-shadow: 3px 3px 0px navy;
-  }
+    .logo-img.mobile-small {
+        height: 95px;
+        width: 120px;
+        padding: 0;
+        margin: 0;
+        display: block;
+        top: 0;
+    }
 
-  .custom-button {
-    font-size: 10px;
-    width: 100px; /* Sabit genişlik */
-    height: 33px; /* Sabit yükseklik */
-  }
+    .button-container.mobile-small {
+        font-size: 12px;
+        padding: 10px 18px;
+        box-shadow: 3px 3px 0px navy;
+    }
 
-  input {
-    font-size: 14px;
-    padding: 10px 15px;
-    box-shadow: 3px 3px 0px navy; /* Mobilde gölge biraz küçüldü */
-  }
+    .custom-button {
+        font-size: 10px;
+        width: 100px;
+        height: 33px;
+    }
 
-  input::placeholder {
-    font-size: 12px;
-  }
+    input {
+        font-size: 14px;
+        padding: 10px 15px;
+        box-shadow: 3px 3px 0px navy;
+    }
+
+    input::placeholder {
+        font-size: 12px;
+    }
 }
