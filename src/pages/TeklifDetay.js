@@ -93,7 +93,14 @@ doc.setFontSize(12);
   doc.text(cleanText("Yeni Baglica Mah Etimesgut Blv. No: 6H/A"), 14, 65);
   doc.text(cleanText("Etimesgut, ANKARA – Türkiye"), 14, 70);
   doc.text(cleanText("Vergi No: 3770983099 (Etimesgut)"), 14, 75);
-
+  // 🔴 İptal ibaresi (büyük kırmızı yazı)
+  const isIptal = teklif.iptal === true || teklif.iptal === "true";
+  if (isIptal) {
+    doc.setFontSize(20);
+    doc.setTextColor(255, 0, 0); // kırmızı
+    doc.text("İPTAL TEKLİF", 90, 25);
+    doc.setTextColor(0, 0, 0); // tekrar siyah yap
+  }
 doc.setFontSize(21);
   doc.setFont("Helvetica", "bold");
     doc.text(`Teklif`, 90, 30);
@@ -152,7 +159,10 @@ doc.text(`Toplam Tutar: ${formatCurrency(teklif.toplamTutar)} TL`, 20, 165);
 
   return (
     <div style={{ padding: "20px", maxWidth: "800px", margin: "auto", fontFamily: "Helvetica, sans-serif" }}>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Teklif</h2>
+      <h2 className="title" style={{ color: teklif.iptal ? "red" : "black" }}>
+  {teklif.iptal ? "İPTAL Teklif Detayı" : "Teklif Detayı"}
+</h2>
+
       <p><strong>Teklif No:</strong> {teklif.teklifNo || "Bilinmiyor"}</p>
       <p><strong>Tarih:</strong> {new Date(teklif.tarih).toLocaleDateString("tr-TR")}</p>
       <p><strong>Müşteri:</strong> {teklif.musteriAdi}</p>
@@ -178,7 +188,7 @@ doc.text(`Toplam Tutar: ${formatCurrency(teklif.toplamTutar)} TL`, 20, 165);
     wordBreak: "break-word",
     maxWidth: "200px"
   }}>
-  {cleanText(urun.urunAdi)}
+  {urun.urunAdi}
 </td>
 
               <td>{formatCurrency(urun.fiyat)} TL</td>
