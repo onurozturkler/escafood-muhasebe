@@ -74,9 +74,21 @@ const Tahsilatlar = () => {
 
     return (
         <div>
-            <h2>Tahsilatlar</h2>
-            <button onClick={() => setShowTahsilatEkle(!showTahsilatEkle)}>+ Yeni Tahsilat Ekle</button>
-            {showTahsilatEkle && <div style={{ marginBottom: "20px" }}><TahsilatEkle /></div>}
+  <h2>Tahsilatlar</h2>
+  <button
+    onClick={() => setShowTahsilatEkle(!showTahsilatEkle)}
+    className={`custom-button ${isScrolled ? "mobile-small" : ""}`}
+    style={{ marginBottom: "20px" }}
+  >
+    + Yeni Tahsilat Ekle
+  </button>
+
+  {showTahsilatEkle && (
+    <div style={{ marginBottom: "20px" }}>
+      <TahsilatEkle />
+    </div>
+  )}
+</div>
 
             <table className="styled-table">
                 <thead>
@@ -98,17 +110,22 @@ const Tahsilatlar = () => {
             <td>{tahsilat.tahsilatNo}</td>
             <td>{tahsilat.musteriAdi || "Bilinmeyen"}</td>
             <td>₺{tahsilat.tahsilatTutari.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}</td>
-            <td>
-<button className="detay-buton" onClick={() => navigate(`/tahsilatlar/detay/${tahsilat.id}`)}>
-                    Detay
-                </button>
-                {!tahsilat.iptal && (
-                    <button className="iptal-buton" onClick={() => handleTahsilatIptal(tahsilat.id, tahsilat.musteriId, tahsilat.tahsilatTutari)}>
-                        İptal Et
-                    </button>
-                )}
-                
-            </td>
+           <td>
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <button className="detay-buton" onClick={() => navigate(`/tahsilatlar/detay/${tahsilat.id}`)}>
+      Detay
+    </button>
+    {!tahsilat.iptal && (
+      <button
+        className="iptal-buton"
+        onClick={() => handleTahsilatIptal(tahsilat.id, tahsilat.musteriId, tahsilat.tahsilatTutari)}
+      >
+        İptal Et
+      </button>
+    )}
+  </div>
+</td>
+
         </tr>
     ))}
 </tbody>
