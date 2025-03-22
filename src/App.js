@@ -24,11 +24,11 @@ function App() {
       if (window.scrollY > 30) {
         navbar?.classList.add("mobile-small");
         logo?.classList.add("mobile-small");
-        body.style.paddingTop = "80px";
+        body.style.paddingTop = "400px";
       } else {
         navbar?.classList.remove("mobile-small");
         logo?.classList.remove("mobile-small");
-        body.style.paddingTop = "150px";
+        body.style.paddingTop = "350px";
       }
     };
 
