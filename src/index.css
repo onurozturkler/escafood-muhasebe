@@ -140,11 +140,14 @@ input:focus {
         width: 95px;
     }
 
-    .button-container.mobile-small .custom-button {
+    .button-container.mobile-small {
         font-size: 12px;
         padding: 10px 18px;
         box-shadow: 3px 3px 0px navy;
     }
+.custom-button {
+        width: 120px; /* Sabit genişlik */
+    height: 40px; /* Sabit yükseklik */
     
      input {
         font-size: 14px;
