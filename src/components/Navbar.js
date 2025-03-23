@@ -48,13 +48,14 @@ function Navbar() {
       }
     };
 
+
     handleScroll(); // ilk render'da çalıştır
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <nav className={`navbar ${isScrolled ? "mobile-small" : ""}`}>
+className={`logo-img ${isScrolled ? "mobile-small" : ""} ${menuOpen ? "menu-open" : ""}`}
       <div className={`navbar-container ${isScrolled ? "mobile-small" : ""}`}>
         {/* ✅ Logo */}
         <Link to="/" className="logo">
