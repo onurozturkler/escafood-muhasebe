@@ -13,6 +13,7 @@ import Musteriler from "./pages/Musteriler";
 import MusteriDetay from "./pages/MusteriDetay";
 import Urunler from "./pages/Urunler";
 import TeklifEkle from "./pages/TeklifEkle";
+import "../index.css";
 
 function App() {
   useEffect(() => {
@@ -24,11 +25,11 @@ function App() {
       if (window.scrollY > 30) {
         navbar?.classList.add("mobile-small");
         logo?.classList.add("mobile-small");
-        body.style.paddingTop = "400px";
+        body.style.paddingTop = "70px";
       } else {
         navbar?.classList.remove("mobile-small");
         logo?.classList.remove("mobile-small");
-        body.style.paddingTop = "350px";
+        body.style.paddingTop = "70px";
       }
     };
 
