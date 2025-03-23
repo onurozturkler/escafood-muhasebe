@@ -5,6 +5,22 @@ body, button, input, label, textarea, select, table, th, td {
     font-family: 'Poppins', sans-serif;
 }
 
+.hamburger {
+  font-size: 28px;
+background-color: red;
+box-shadow: 6px 6px 0px navy;
+  color: white;
+  border: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+        border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+
 /* 🌟 Navbar */
 .navbar {
     background: linear-gradient(to right, #003366, #0055aa); 
@@ -19,7 +35,7 @@ body, button, input, label, textarea, select, table, th, td {
 
 /* 🌟 Sayfa içeriğini aşağı it */
 body {
-    padding-top: 0px;
+    padding-top: 200px;
     transition: padding-top 0.3s ease-in-out;
 }
 
