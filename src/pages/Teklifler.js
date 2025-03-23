@@ -69,7 +69,15 @@ const Teklifler = () => {
     return (
         <div>
             <h2>Teklifler</h2>
-            <button onClick={() => navigate("/teklifler/yeni")}>+ Yeni Teklif Ekle</button>
+         <button
+  className="custom-button"
+  style={{ marginBottom: "20px" }}
+  onClick={() => navigate("/teklifler/yeni")}
+>
+  + Yeni Teklif Ekle
+</button>
+
+
             <table border="1" cellPadding="5" cellSpacing="0">
                 <thead>
                     <tr>
