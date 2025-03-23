@@ -13,7 +13,7 @@ import Musteriler from "./pages/Musteriler";
 import MusteriDetay from "./pages/MusteriDetay";
 import Urunler from "./pages/Urunler";
 import TeklifEkle from "./pages/TeklifEkle";
-import "../index.css";
+
 
 function App() {
   useEffect(() => {
