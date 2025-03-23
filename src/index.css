@@ -31,6 +31,7 @@ box-shadow: 6px 6px 0px navy;
     z-index: 50;
     padding-top: 0;
     padding-bottom: 15px;
+  margin: 0 !important;
 }
 
 /* 🌟 Sayfa içeriğini aşağı it */
@@ -174,6 +175,7 @@ input[type="file"] {
     box-shadow: 4px 4px 0px navy;
 }
 
+
 /* 📱 Mobil Görünüm */
 @media (max-width: 768px) {
     .navbar.mobile-small {
@@ -186,16 +188,21 @@ input[type="file"] {
         justify-content: space-between;
         align-items: flex-start;
         max-width: 100%;
-        margin: 10px auto;
+        margin: 0;
         padding-top: 2px;
         padding-bottom: 10px;
     }
+    
+.logo-img.menu-open {
+  width: 190px;
+  height: 150px;
+}
 
 .logo-img.mobile-small {
-  height: 95px !important;
-  width: 120px;
-  padding: 0;
-  margin: 0;
+  height: 105px !important;
+  width: 133px;
+  padding: 0 !important;
+  margin: 0 !important;
   display: block;
   object-fit: contain;
 }
