@@ -7,12 +7,13 @@ const navLinks = [
   { to: "/teklifler", text: "Teklifler" },
   { to: "/tahsilatlar", text: "Tahsilatlar" },
   { to: "/musteriler", text: "Müşteriler" },
-  { to: "/urunler", text: "Ürünler" }
+  { to: "/urunler", text: "Ürünler" },
 ];
 
 function Navbar() {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,9 +48,7 @@ function Navbar() {
       }
     };
 
-    // Başlangıçta bir kere çalıştır
-    handleScroll();
-
+    handleScroll(); // ilk render'da çalıştır
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -66,18 +65,32 @@ function Navbar() {
           />
         </Link>
 
+        {/* ✅ Hamburger Menüsü */}
+        <button
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+          style={{ display: window.innerWidth <= 768 ? "block" : "none" }}
+        >
+          ☰
+        </button>
+
         {/* ✅ Butonlar */}
-        <div className={`button-container ${isScrolled ? "mobile-small" : ""}`}>
-          {navLinks.map((item, index) => (
-            <button
-              key={index}
-              onClick={() => navigate(item.to)}
-              className={`custom-button ${isScrolled ? "mobile-small" : ""}`}
-            >
-              {item.text}
-            </button>
-          ))}
-        </div>
+        {(menuOpen || window.innerWidth > 768) && (
+          <div className={`button-container ${isScrolled ? "mobile-small" : ""}`}>
+            {navLinks.map((item, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate(item.to);
+                }}
+                className={`custom-button ${isScrolled ? "mobile-small" : ""}`}
+              >
+                {item.text}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </nav>
   );
