@@ -7,8 +7,23 @@ body, button, input, label, textarea, select, table, th, td {
 
 body {
     margin: 0;
-    padding-top: 180px;
     transition: padding-top 0.3s ease-in-out;
+}
+
+body.desktop {
+  padding-top: 180px;
+}
+
+body.desktop.scrolled {
+  padding-top: 180px;
+}
+
+body.mobile {
+  padding-top: 180px;
+}
+
+body.mobile.menu-open {
+  padding-top: 490px;
 }
 
 .hamburger {
@@ -161,14 +176,6 @@ input[type="file"] {
 }
 
 @media (max-width: 768px) {
-  body.menu-open {
-    padding-top: 490px !important;
-  }
-
-  body {
-    padding-top: 180px;
-  }
-
   .navbar.mobile-small {
     padding: 0;
     transform: translateY(-40px);
