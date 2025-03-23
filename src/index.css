@@ -36,14 +36,13 @@ body {
 }
 
 /* 🌟 Logo */
-.logo img {
-    padding: 0;
-    margin: 0;
-    height: 150px;
-    width: 190px;
-    display: block;
-    top: 0;
+.logo-img.mobile-small {
+  height: 95px;
+  width: 120px;
+  margin-top: 10px;
+  object-fit: contain;
 }
+
 
 /* 🌟 Navbar butonları */
 .button-container {
