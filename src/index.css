@@ -5,213 +5,203 @@ body, button, input, label, textarea, select, table, th, td {
     font-family: 'Poppins', sans-serif;
 }
 
-.hamburger {
-  font-size: 28px;
-background-color: red;
-box-shadow: 6px 6px 0px navy;
-  color: white;
-  border: none;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 100;
-        border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-
-/* 🌟 Navbar */
-.navbar {
-    background: linear-gradient(to right, #003366, #0055aa); 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 50;
-    padding-top: 0;
-    padding-bottom: 15px;
-  margin: 0 !important;
-}
-
-/* 🌟 Sayfa içeriğini aşağı it */
 body {
-    padding-top: 200px;
+    margin: 0;
+    padding-top: 180px;
     transition: padding-top 0.3s ease-in-out;
 }
 
-/* 🌟 Navbar içeriği */
-.navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 0;
-    padding-bottom: 15px;
-    top: 0;
+.hamburger {
+  font-size: 28px;
+  background-color: red;
+  box-shadow: 6px 6px 0px navy;
+  color: white;
+  border: none;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 100;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-/* 🌟 Logo */
+/* 🌟 Navbar */
+.navbar {
+  background: linear-gradient(to right, #003366, #0055aa); 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 50;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0 !important;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
 .logo-img {
   height: 95px;
   width: 120px;
-  margin-top: 10px;
+  margin: 0;
+  padding: 0;
   object-fit: contain;
 }
 
-
-/* 🌟 Navbar butonları */
 .button-container {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 20px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
-/* 🌟 Büyük butonlar (Ana butonlar) */
 .custom-button {
-    position: relative;
-    background-color: red;
-    color: white;
-    font-size: clamp(12px, 1.8vw, 18px); /* 📏 Ekrana göre otomatik küçülür */
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    border: none;
-    padding: 15px 25px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
-    box-shadow: 6px 6px 0px navy;
-    width: 180px;
-    height: 60px;
-
-    white-space: nowrap;         /* Tek satırda tutar */
-    overflow: hidden;            /* Taşmayı engeller */
-    text-overflow: ellipsis;     /* Gerekirse ... ekler */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+  position: relative;
+  background-color: red;
+  color: white;
+  font-size: clamp(12px, 1.8vw, 18px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 6px 6px 0px navy;
+  width: 180px;
+  height: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
-
 
 .custom-button:hover {
-    transform: translateY(-3px);
+  transform: translateY(-3px);
 }
 
-/* 🌟 Küçük genel butonlar (Sil, Detay, Ekle...) */
 button {
-    font-size: 10px;
-    gap: 8px;
-    font-weight: 700;
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 9px 15px;
-    border-radius: 10px;
-    box-shadow: 4px 4px 0px navy;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+  font-size: 10px;
+  gap: 8px;
+  font-weight: 700;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 9px 15px;
+  border-radius: 10px;
+  box-shadow: 4px 4px 0px navy;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
 button:hover {
-    transform: translateY(-2px);
-    background-color: #ff3333;
+  transform: translateY(-2px);
+  background-color: #ff3333;
 }
 
-/* 🌟 Label */
 label {
-    font-size: 10px;
-    font-weight: 700;
-    color: navy;
-    background-color: white;
-    padding: 6px 12px;
-    border-radius: 8px;
-    display: inline-block;
-    text-transform: uppercase;
-    transition: all 0.3s ease-in-out;
+  font-size: 10px;
+  font-weight: 700;
+  color: navy;
+  background-color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
 }
 
-/* 🌟 Input */
 input {
-    font-size: 13px;
-    font-weight: 500;
-    color: black;
-    background-color: white;
-    border: 2px solid navy;
-    padding: 6px 12px;
-    border-radius: 10px;
-    box-shadow: 4px 4px 0px navy;
-    outline: none;
-    gap: 8px;
-    transition: all 0.3s ease-in-out;
+  font-size: 13px;
+  font-weight: 500;
+  color: black;
+  background-color: white;
+  border: 2px solid navy;
+  padding: 6px 12px;
+  border-radius: 10px;
+  box-shadow: 4px 4px 0px navy;
+  outline: none;
+  gap: 8px;
+  transition: all 0.3s ease-in-out;
 }
 
-/* 🌟 Placeholder */
 input::placeholder {
-    color: gray;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+  color: gray;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
-/* 🌟 Input focus */
 input:focus {
-    background-color: #f9f9f9;
-    box-shadow: 2px 2px 0px navy;
-    transform: translateY(-2px);
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 0px navy;
+  transform: translateY(-2px);
 }
 
-/* 🌟 Dosya input */
 input[type="file"] {
-    border: 2px solid navy;
-    padding: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    border-radius: 10px;
-    background-color: white;
-    box-shadow: 4px 4px 0px navy;
+  border: 2px solid navy;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 4px 4px 0px navy;
 }
 
-
-/* 📱 Mobil Görünüm */
 @media (max-width: 768px) {
-    .navbar.mobile-small {
-        padding: 5px;
-        transform: translateY(-40px);
-    }
+  body.menu-open {
+    padding-top: 490px !important;
+  }
 
-    .navbar-container.mobile-small {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        max-width: 100%;
-        margin: 0;
-        padding-top: 2px;
-        padding-bottom: 10px;
-    }
-    
-.logo-img.menu-open {
-  width: 190px;
-  height: 150px;
-}
+  body {
+    padding-top: 180px;
+  }
 
-.logo-img.mobile-small {
-  height: 105px !important;
-  width: 133px;
-  padding: 0 !important;
-  margin: 0 !important;
-  display: block;
-  object-fit: contain;
-}
+  .navbar.mobile-small {
+    padding: 0;
+    transform: translateY(-40px);
+  }
 
-    .button-container.mobile-small {
-        font-size: 12px;
-        padding: 10px 18px;
-        box-shadow: 3px 3px 0px navy;
-    }
+  .navbar-container.mobile-small {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .logo-img.menu-open {
+    width: 190px;
+    height: 150px;
+  }
+
+  .logo-img.mobile-small {
+    height: 105px !important;
+    width: 133px;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block;
+    object-fit: contain;
+  }
+
+  .button-container.mobile-small {
+    font-size: 12px;
+    padding: 10px 18px;
+    box-shadow: 3px 3px 0px navy;
+  }
 
   .custom-button {
     font-size: clamp(10px, 3vw, 14px);
@@ -220,14 +210,13 @@ input[type="file"] {
     padding: 10px 15px;
   }
 
+  input {
+    font-size: 14px;
+    padding: 10px 15px;
+    box-shadow: 3px 3px 0px navy;
+  }
 
-    input {
-        font-size: 14px;
-        padding: 10px 15px;
-        box-shadow: 3px 3px 0px navy;
-    }
-
-    input::placeholder {
-        font-size: 12px;
-    }
+  input::placeholder {
+    font-size: 12px;
+  }
 }
