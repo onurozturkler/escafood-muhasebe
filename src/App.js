@@ -1,6 +1,7 @@
 // App.js
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./index.css";
 
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -25,11 +26,11 @@ function App() {
       if (window.scrollY > 30) {
         navbar?.classList.add("mobile-small");
         logo?.classList.add("mobile-small");
-        body.style.paddingTop = "70px";
+        body.style.paddingTop = "80px";
       } else {
         navbar?.classList.remove("mobile-small");
         logo?.classList.remove("mobile-small");
-        body.style.paddingTop = "70px";
+        body.style.paddingTop = "80px";
       }
     };
 
