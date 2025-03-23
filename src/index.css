@@ -36,7 +36,7 @@ body {
 }
 
 /* 🌟 Logo */
-.logo-img.mobile-small {
+.logo-img {
   height: 95px;
   width: 120px;
   margin-top: 10px;
@@ -58,7 +58,7 @@ body {
     position: relative;
     background-color: red;
     color: white;
-    font-size: 18px;
+    font-size: clamp(12px, 1.8vw, 18px); /* 📏 Ekrana göre otomatik küçülür */
     font-weight: 700;
     letter-spacing: 0.5px;
     border: none;
@@ -69,7 +69,16 @@ body {
     box-shadow: 6px 6px 0px navy;
     width: 180px;
     height: 60px;
+
+    white-space: nowrap;         /* Tek satırda tutar */
+    overflow: hidden;            /* Taşmayı engeller */
+    text-overflow: ellipsis;     /* Gerekirse ... ekler */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
+
 
 .custom-button:hover {
     transform: translateY(-3px);
@@ -161,19 +170,19 @@ input[type="file"] {
         justify-content: space-between;
         align-items: flex-start;
         max-width: 100%;
-        margin: 0 auto;
+        margin: 10px auto;
         padding-top: 2px;
         padding-bottom: 10px;
     }
 
-    .logo-img.mobile-small {
-        height: 95px !important;
-        width: 120px;
-        padding: 1px;
-        margin: 1px;
-        display: block;
-        top: 1px;
-    }
+.logo-img.mobile-small {
+  height: 95px !important;
+  width: 120px;
+  padding: 0;
+  margin: 0;
+  display: block;
+  object-fit: contain;
+}
 
     .button-container.mobile-small {
         font-size: 12px;
@@ -181,12 +190,12 @@ input[type="file"] {
         box-shadow: 3px 3px 0px navy;
     }
 
-.custom-button.mobile-small {
-    font-size: 10px;
-    width: 100px;
-    height: 33px;
-    padding: 11px;
-}
+  .custom-button {
+    font-size: clamp(10px, 3vw, 14px);
+    width: 140px;
+    height: 50px;
+    padding: 10px 15px;
+  }
 
 
     input {
