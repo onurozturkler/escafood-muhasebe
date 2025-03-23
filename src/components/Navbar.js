@@ -16,48 +16,38 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    const handleScroll = () => {
-      const navbar = document.querySelector(".navbar");
-      const logo = document.querySelector(".logo-img");
-      const body = document.body;
+useEffect(() => {
+  const handleResize = () => {
+    const isNowMobile = window.innerWidth <= 768;
+    setIsMobile(isNowMobile);
+  };
 
-      if (isMobile) {
-        if (window.scrollY > 30) {
-          setIsScrolled(true);
-          navbar?.classList.add("mobile-small");
-          logo?.classList.add("mobile-small");
-          body.style.paddingTop = menuOpen ? "490px" : "180px";
-        } else {
-          setIsScrolled(false);
-          navbar?.classList.remove("mobile-small");
-          logo?.classList.remove("mobile-small");
-          body.style.paddingTop = menuOpen ? "490px" : "180px";
-        }
-      } else {
-        if (window.scrollY > 30) {
-          setIsScrolled(true);
-          navbar?.classList.add("mobile-small");
-          logo?.classList.add("mobile-small");
-          body.style.paddingTop = "100px";
-        } else {
-          setIsScrolled(false);
-          navbar?.classList.remove("mobile-small");
-          logo?.classList.remove("mobile-small");
-          body.style.paddingTop = "150px";
-        }
-      }
-    };
+  const updateBodyClass = () => {
+    const body = document.body;
+    body.classList.remove("desktop", "mobile", "menu-open", "scrolled");
 
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleResize);
-    handleScroll(); // başlangıçta çalışsın
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [isMobile, menuOpen]);
+    if (window.innerWidth <= 768) {
+      body.classList.add("mobile");
+      if (menuOpen) body.classList.add("menu-open");
+    } else {
+      body.classList.add("desktop");
+    }
+
+    if (window.scrollY > 30) {
+      body.classList.add("scrolled");
+    }
+  };
+
+  handleResize();
+  updateBodyClass();
+
+  window.addEventListener("resize", handleResize);
+  window.addEventListener("scroll", updateBodyClass);
+  return () => {
+    window.removeEventListener("resize", handleResize);
+    window.removeEventListener("scroll", updateBodyClass);
+  };
+}, [menuOpen]);
 
   return (
     <nav className={`navbar ${isScrolled ? "mobile-small" : ""}`}>
