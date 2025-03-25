@@ -77,7 +77,7 @@ const TeklifDetay = () => {
     const musteriY = 90;
     doc.setFont("Poppins", "bold");
     doc.text("Teklif No:", 130, 40);
-    doc.text(teklif.teklifNo || "Bilinmiyor", 165, 40);
+    doc.text([String(teklif.teklifNo || "Bilinmiyor")], 165, 40);
     doc.text("Sayın:", 130, musteriY);
     doc.setFont("Poppins", "normal");
     doc.text(doc.splitTextToSize(teklif.musteriAdi || "-", 60), 145, musteriY);
@@ -175,7 +175,7 @@ const TeklifDetay = () => {
 
       <button
         onClick={generatePDF}
-        style={{ marginTop: "20px", padding: "10px 15px", backgroundColor: "#007BFF", color: "#fff", border: "none", cursor: "pointer", borderRadius: "5px" }}
+        style={{ marginTop: "20px", padding: "10px 20px", backgroundColor: "#007BFF", color: "#fff", border: "none", cursor: "pointer", borderRadius: "5px" }}
       >
         PDF Oluştur
       </button>
@@ -184,4 +184,3 @@ const TeklifDetay = () => {
 };
 
 export default TeklifDetay;
-
