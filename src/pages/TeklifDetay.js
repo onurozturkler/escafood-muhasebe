@@ -175,7 +175,7 @@ const TeklifDetay = () => {
 
       <button
         onClick={generatePDF}
-        style={{ marginTop: "20px", padding: "10px 20px", backgroundColor: "#007BFF", color: "#fff", border: "none", cursor: "pointer", borderRadius: "5px" }}
+        style={{ marginTop: "20px", padding: "10px 15px", backgroundColor: "#007BFF", color: "#fff", border: "none", cursor: "pointer", borderRadius: "5px" }}
       >
         PDF Oluştur
       </button>
