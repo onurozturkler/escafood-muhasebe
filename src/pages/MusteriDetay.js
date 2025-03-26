@@ -4,7 +4,7 @@ import { db } from "../firebase";
 import { collection, getDocs, getDoc, doc, query, orderBy, where } from "firebase/firestore";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import "../poppins"; // Poppins fontlarını ekledik
+import "./poppins"; // Poppins fontlarını ekledik
 import "./MusteriDetay.css";
 import "../index.css";
 
