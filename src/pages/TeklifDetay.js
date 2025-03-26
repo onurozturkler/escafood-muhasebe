@@ -69,10 +69,11 @@ const TeklifDetay = () => {
 
     doc.setFontSize(12);
     const firmaY = 50;
-    doc.text("ESCA FOOD GIDA DIŞ TİCARET SANAYİ ANONİM ŞİRKETİ", 14, firmaY);
-    doc.text("Yeni Bağlıca Mah. Etimesgut Blv. No: 6H/A", 14, firmaY + 8);
-    doc.text("Etimesgut, ANKARA – Türkiye", 14, firmaY + 16);
-    doc.text("Vergi No: 3770983099 (Etimesgut)", 14, firmaY + 24);
+    doc.text("ESCA FOOD GIDA DIŞ TİCARET", 14, firmaY);
+    doc.text("SANAYİ ANONİM ŞİRKETİ", 14, firmaY+7);
+    doc.text("Yeni Bağlıca Mah. Etimesgut Blv. No: 6H/A", 14, firmaY + 16);
+    doc.text("Etimesgut, ANKARA – Türkiye", 14, firmaY + 23);
+    doc.text("Vergi No: 3770983099 (Etimesgut)", 14, firmaY + 30);
 
     const musteriY = 50;
     doc.setFont("Poppins", "bold");
