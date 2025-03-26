@@ -65,7 +65,7 @@ const TeklifDetay = () => {
     }
 
     doc.setFontSize(18);
-    doc.text("Teklif", 90, 30);
+    doc.text("TEKLİF", 90, 30);
 
     doc.setFontSize(12);
     const firmaY = 50;
@@ -74,18 +74,20 @@ const TeklifDetay = () => {
     doc.text("Etimesgut, ANKARA – Türkiye", 14, firmaY + 16);
     doc.text("Vergi No: 3770983099 (Etimesgut)", 14, firmaY + 24);
 
-    const musteriY = 90;
+    const musteriY = 50;
     doc.setFont("Poppins", "bold");
     doc.text("Teklif No:", 130, 40);
+    doc.setFont("Poppins", "bold");
     doc.text([String(teklif.teklifNo || "Bilinmiyor")], 165, 40);
+    doc.setFont("Poppins", "bold");
     doc.text("Sayın:", 130, musteriY);
     doc.setFont("Poppins", "normal");
-    doc.text(doc.splitTextToSize(teklif.musteriAdi || "-", 60), 145, musteriY);
+    doc.text(doc.splitTextToSize(teklif.musteriAdi || "-", 60), 130, musteriY + 15);
 
     doc.setFont("Poppins", "bold");
     doc.text("Adres:", 130, musteriY + 25);
     doc.setFont("Poppins", "normal");
-    doc.text(doc.splitTextToSize(teklif.musteriAdres || "-", 60), 145, musteriY + 25);
+    doc.text(doc.splitTextToSize(teklif.musteriAdres || "-", 60), 130, musteriY + 35);
 
     doc.text(
       `Tarih: ${new Date(teklif.tarih).toLocaleDateString("tr-TR")}`,
