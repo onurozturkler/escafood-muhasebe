@@ -63,7 +63,7 @@ const TeklifDetay = () => {
       doc.text("İPTAL TEKLİF", 90, 25);
       doc.setTextColor(0, 0, 0);
     }
-
+doc.setFont("Poppins", "bold");
     doc.setFontSize(18);
     doc.text("TEKLİF", 90, 30);
 
@@ -71,6 +71,7 @@ const TeklifDetay = () => {
     const firmaY = 50;
     doc.text("ESCA FOOD GIDA DIŞ TİCARET", 14, firmaY);
     doc.text("SANAYİ ANONİM ŞİRKETİ", 14, firmaY+7);
+    doc.setFont("Poppins", "normal");
     doc.text("Yeni Bağlıca Mah. Etimesgut Blv. No: 6H/A", 14, firmaY + 16);
     doc.text("Etimesgut, ANKARA – Türkiye", 14, firmaY + 23);
     doc.text("Vergi No: 3770983099 (Etimesgut)", 14, firmaY + 30);
@@ -83,12 +84,12 @@ const TeklifDetay = () => {
     doc.setFont("Poppins", "bold");
     doc.text("Sayın:", 130, musteriY);
     doc.setFont("Poppins", "normal");
-    doc.text(doc.splitTextToSize(teklif.musteriAdi || "-", 60), 130, musteriY + 15);
+    doc.text(doc.splitTextToSize(teklif.musteriAdi || "-", 60), 130, musteriY + 7);
 
     doc.setFont("Poppins", "bold");
-    doc.text("Adres:", 130, musteriY + 25);
+    doc.text("Adres:", 130, musteriY + 17);
     doc.setFont("Poppins", "normal");
-    doc.text(doc.splitTextToSize(teklif.musteriAdres || "-", 60), 130, musteriY + 35);
+    doc.text(doc.splitTextToSize(teklif.musteriAdres || "-", 60), 130, musteriY + 24);
 
     doc.text(
       `Tarih: ${new Date(teklif.tarih).toLocaleDateString("tr-TR")}`,
@@ -150,31 +151,40 @@ const TeklifDetay = () => {
       <p><strong>Adres:</strong> {teklif.musteriAdres}</p>
 
       <h3>Ürünler</h3>
-      <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "10px" }}>
-        <thead>
-          <tr style={{ backgroundColor: "#f0f0f0", borderBottom: "2px solid #ddd" }}>
-            <th>Barkod</th>
-            <th>Ürün Adı</th>
-            <th>Birim Fiyat</th>
-            <th>Miktar</th>
-            <th>Toplam</th>
-          </tr>
-        </thead>
-        <tbody>
-          {teklif.urunler?.map((urun, index) => (
-            <tr key={index} style={{ borderBottom: "1px solid #ddd" }}>
-              <td>{urun.barkod}</td>
-              <td style={{ whiteSpace: "normal", wordBreak: "break-word", maxWidth: "200px" }}>{urun.urunAdi}</td>
-              <td>{formatCurrency(urun.fiyat)} TL</td>
-              <td>{urun.miktar} Adet</td>
-              <td>{formatCurrency(urun.fiyat * urun.miktar)} TL</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p><strong>Toplam Tutar:</strong> {formatCurrency(teklif.toplamTutar)} TL</p>
-      <p><strong>İskonto Tutarı {teklif.iskontoOrani ? `(%${teklif.iskontoOrani})` : ""}:</strong> {formatCurrency(teklif.iskontoTutar)} TL</p>
-      <p><strong>Genel Toplam Tutar:</strong> {formatCurrency(teklif.geneltoplamTutar)} TL</p>
+<table style={{ width: "100%", borderCollapse: "collapse", marginTop: "10px" }}>
+  <thead>
+    <tr style={{ backgroundColor: "#005b99", color: "#fff", textAlign: "left" }}>
+      <th style={{ width: "15%" }}>Barkod</th>
+      <th style={{ width: "40%" }}>Ürün Adı</th>
+      <th style={{ width: "15%" }}>Birim Fiyat</th>
+      <th style={{ width: "15%" }}>Miktar</th>
+      <th style={{ width: "15%" }}>Toplam</th>
+    </tr>
+  </thead>
+  <tbody>
+    {teklif.urunler?.map((urun, index) => (
+      <tr key={index} style={{ borderBottom: "1px solid #ddd" }}>
+        <td>{urun.barkod}</td>
+        <td style={{ whiteSpace: "normal", wordBreak: "break-word" }}>{urun.urunAdi}</td>
+        <td>{formatCurrency(urun.fiyat)} TL</td>
+        <td>{urun.miktar} Adet</td>
+        <td>{formatCurrency(urun.fiyat * urun.miktar)} TL</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+<p><strong>Toplam Tutar:</strong> {formatCurrency(teklif.toplamTutar)} TL</p>
+
+{teklif.iskontoOrani > 0 && (
+  <p>
+    <strong>
+      İskonto Tutarı (%{teklif.iskontoOrani}):
+    </strong>{" "}
+    {formatCurrency((teklif.toplamTutar * teklif.iskontoOrani) / 100)} TL
+  </p>
+)}
+
+<p><strong>Genel Toplam Tutar:</strong> {formatCurrency(teklif.geneltoplamTutar)} TL</p>
 
       <button
         onClick={generatePDF}
