@@ -1,6 +1,6 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import "./poppins"; // Türkçe karakter destekli Poppins fontu
+import "../poppins"; // Türkçe karakter destekli Poppins fontu
 
 export function generateTahsilatPDF(tahsilat, musteri) {
     const doc = new jsPDF();
